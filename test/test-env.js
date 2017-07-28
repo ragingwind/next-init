@@ -1,6 +1,5 @@
 import test from 'ava'
 import env from '../dist/env'
-import userinfo from '../dist/userinfo'
 import * as path from 'path'
 
 test(async t => {
@@ -16,7 +15,7 @@ test(async t => {
 })
 
 test(async t => {
-	const u = await userinfo()
+	const u = (await env([])).user
 
 	t.true(u !== undefined)
 	t.true(u.name !== undefined)
