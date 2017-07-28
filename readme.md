@@ -1,66 +1,46 @@
-# next-init [![Build Status](https://travis-ci.org/ragingwind/next-init.svg?branch=master)](https://travis-ci.org/ragingwind/next-init)
+# next-init [![Build Status](https://travis-ci.org/next-init/next-init.svg?branch=master)](https://travis-ci.org/next-init/next-init)
 
->
+> ✒ CLI for Next.js apps scaffolding from whatever
 
 ## Install
 
 ```
-$ npm install next-init
+$ npm install -g next-init
 ```
 
-## Usage
+## Examples
 
-```js
-const nextInit = require('next-init');
+```sh
+# Initialize a project at current path
+$ next-init default
 
-nextInit('unicorns');
-//=> 'unicorns & rainbows'
-```
+# Initialize a project with an official template `default` to target path
+# Same as `next init`
+$ next-init default ./my-next-app
 
+# Initialize a project with a boilerplate or a custom template inspired from `vue init`
+$ next-init /someone/someone-next-app ./my-next-app
 
-## API
+# Initialize a project with an official example by --example / -e flag
+$ next-init --example with-glamorous ./my-next-app
 
-### nextInit(input, [options])
+# Initialize a project with an official example by examples list
+$ next-init --example ./my-next-app
+$ next-init -e ./my-next-app
 
-#### input
+# Initialize a project with an official example by path of next.js repo
+$ next-init /next.js/examples/with-glamorous ./my-next-app
 
-Type: `string`
+# Get a list of official tempaltes
+$ next-init --list
 
-Lorem ipsum.
+# Get a list of official examples
+$ next-init --example --list
 
-#### options
-
-##### foo
-
-Type: `boolean`<br>
-Default: `false`
-
-Lorem ipsum.
-
-
-## CLI
-
-```
-$ npm install --global next-init
-```
-
-```
+# Show help
 $ next-init --help
-
-  Usage
-    next-init [input]
-
-  Options
-    --foo  Lorem ipsum [Default: false]
-
-  Examples
-    $ next-init
-    unicorns & rainbows
-    $ next-init ponies
-    ponies & rainbows
 ```
-
 
 ## License
 
-MIT © [Jimmy Moon](https://github.com/ragingwind)
+MIT © [next-init](https://github.com/next-init)
