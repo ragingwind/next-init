@@ -10,7 +10,7 @@
 		"url": "http://ragingwind.me"
 	},
 	"bin": {
-		"chrome": "./dist/cli.js"
+		"next-init": "./dist/cli.js"
 	},
 	"engines": {
 		"node": ">=6"
@@ -21,8 +21,7 @@
 		"prepublishOnly": "npm run build"
 	},
 	"files": [
-		"dist",
-		"!dist/test*.js"
+		"dist"
 	],
 	"keywords": [
 		"next",
