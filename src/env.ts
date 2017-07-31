@@ -29,10 +29,10 @@ export async function userinfo() {
 	return user
 }
 
-export default function (input: string) {
+export default function () {
 	return new Promise(async resolve => {
 		const env = {
-			name: input[0] || path.relative('../', process.cwd()),
+			projectName: path.relative('../', process.cwd()),
 			description: `My ${superb()} project with Next.js`,
 			user: await userinfo()
 		}

@@ -1,17 +1,17 @@
 import inquirer = require('inquirer')
 
-export default function (template: string) {
+export default function (env: any) {
 	return inquirer.prompt([{
 		name: 'projectName',
 		message: 'Project name?',
-		default: ''
+		default: env.projectName
 	}, {
 		name: 'description',
 		message: 'Module description?',
-		default: ``
+		default: env.description
 	}, {
 		name: 'username',
 		message: 'Username? (eg, Github)',
-		default: `john doh`
+		default: env.user.name
 	}])
 }

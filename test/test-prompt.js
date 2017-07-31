@@ -1,6 +1,6 @@
 import test from 'ava'
-import prompt from '../dist/prompt'
 import inquirer from 'inquirer'
+import prompt from '../dist/prompt'
 
 function autosubmit(ui) {
 	return new Promise(resolve => {
@@ -15,8 +15,13 @@ function autosubmit(ui) {
 }
 
 test(async t => {
-	const promise = prompt()
+	const promise = prompt({
+		projectName: 'test',
+		description: 'description',
+		user: {
+			name: 'test'
+		}
+	})
 	await autosubmit(promise.ui)
-	const a = await Promise.resolve(promise)
-	t.true(a !== undefined)
+	t.true(await Promise.resolve(promise) !== undefined)
 });

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import meow from 'meow'
+import meow = require('meow')
+import env from './env'
 import prompt from './prompt'
 
 const cli = meow(`
@@ -19,7 +20,7 @@ const cli = meow(`
 const template = cli.input[0]
 
 // check that is official template
-prompt(template).then(answers => {
+env().then(prompt).then(answers => {
 	console.log(answers)
 })
 
