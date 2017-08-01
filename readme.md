@@ -15,33 +15,29 @@ $ npm install -g next-init
 $ next-init
 $ next-init ./my-next-app
 
-# from an official tempalte, `default`, to current or target path
+# from an official tempalte, `basic`, to current or target path
 # same as `next init`
-$ next-init default
-$ next-init default ./my-next-app
+$ next-init basic
+$ next-init basic ./my-next-app
 
 # from a boilerplate or a custom template to current or target path
 # inspired from `vue init`
-$ next-init /someone/someone-next-app
-$ next-init /someone/someone-next-app ./my-next-app
+$ next-init someone/someone-next-app
+$ next-init someone/someone-next-app ./my-next-app
 
 # from an official named example, `with-glamorous`, to current or target path
-$ next-init --example with-glamorous
-$ next-init --example with-glamorous ./my-next-app
-$ next-init /next.js/examples/with-glamorous
-$ next-init /next.js/examples/with-glamorous ./my-next-app
+$ next-init next.js/examples/with-glamorous
+$ next-init next.js/examples/with-glamorous ./my-next-app
 
 # from a list of official examples to current or target path
-$ next-init --example
-$ next-init --example ./my-next-app
-$ next-init /next.js/examples/
-$ next-init /next.js/examples/ ./my-next-app
+$ next-init next.js/examples/
+$ next-init next.js/examples/ ./my-next-app
 
 # get a list of official `tempaltes`
 $ next-init --list
 
 # get a list of official `examples`
-$ next-init --example --list
+$ next-init next.js/examples --list
 
 # show help
 $ next-init --help
