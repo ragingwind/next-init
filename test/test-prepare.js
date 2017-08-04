@@ -11,41 +11,43 @@ test.before(t => {
 	rimraf.sync(cacheRoot)
 })
 
-test.serial(async t => {
+test(async t => {
 	await prepare('test-next-init', {
 		template: 'basic'
 	})
 
-	t.true(await fs.exists(`${cacheRoot}/basic/package.json`))
+	t.true(await fs.exists(`${cacheRoot}/nextjs-templates/basic/package.json`))
 
-	await prepare('test-next-init', {
+	const cacheInfo = await prepare('test-next-init', {
 		template: 'basic'
 	})
 
-	t.true(await fs.exists(`${cacheRoot}/basic/package.json`))
+	t.true(await fs.exists(`${cacheRoot}/nextjs-templates/basic/package.json`))
+	t.true(cacheInfo.templates.indexOf('basic') > -1)
 })
 
-test.serial(async t => {
-	let cachedPath = await prepare('test-next-init', {
+test(async t => {
+	let cacheInfo = await prepare('test-next-init', {
 		template: 'next.js/examples'
 	})
 
-	t.true(cachedPath.indexOf(path.resolve(`${cacheRoot}/next.js/examples`)) === 0)
+	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}/next.js/examples`)) === 0)
 	t.true(await fs.exists(`${cacheRoot}/next.js/package.json`))
 
-	cachedPath = await prepare('test-next-init', {
+	cacheInfo = await prepare('test-next-init', {
 		template: 'next.js/examples/with-glamorous'
 	})
 
-	t.true(cachedPath.indexOf(path.resolve(`${cacheRoot}/next.js/examples/with-glamorous`)) === 0)
+	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}/next.js/examples/with-glamorous`)) === 0)
 	t.true(await fs.exists(`${cacheRoot}/next.js/examples/with-glamorous/package.json`))
+	t.true(cacheInfo.templates.indexOf('with-glamorous') > -1)
 })
 
 test.serial(async t => {
-	const cachedPath = await prepare('test-next-init', {
+	const cacheInfo = await prepare('test-next-init', {
 		template: 'ragingwind/nextjs-hnpwa'
 	})
 
-	t.true(cachedPath.indexOf(path.resolve(`${cacheRoot}/ragingwind/nextjs-hnpwa`)) === 0)
+	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}/ragingwind/nextjs-hnpwa`)) === 0)
 	t.true(await fs.exists(`${cacheRoot}/ragingwind/nextjs-hnpwa/package.json`))
 })
