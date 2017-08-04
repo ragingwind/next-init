@@ -2,6 +2,7 @@
 
 import meow = require('meow')
 import env from './env'
+import parseArgs from './parse-args'
 import prompt from './prompt'
 
 const cli = meow(`
@@ -18,9 +19,14 @@ const cli = meow(`
 })
 
 const template = cli.input[0]
+const target = cli.input[1]
 
-// check that is official template
-env().then(prompt).then(answers => {
+async function main() {
+	const args = await parseArgs(cli)
+	const answers = await prompt(await env())
+
 	console.log(answers)
-})
+}
+
+main()
 
