@@ -8,7 +8,8 @@ export default {
 			.then(s => resolve(s.isDirectory()))
 			.catch(err => resolve(false))
 	}),
-	isPathString: (t: string) => t.indexOf('/') > 0 && t.indexOf('/') < t.length - 1,
+	isPathString: (t: string) => t.indexOf('/') > 0,
 	trimSlash: (t: string) => t.replace(/^\//, '').replace(/$\//, ''),
-	isExamplesPath: (t: string) => /^next.js\/examples/.test(t)
+	isExamplesPath: (t: string) => /^next.js\/examples/.test(t),
+	isDefaultTempaltePath: (t: string) => /^nextjs-templates\//.test(t)
 }

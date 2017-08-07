@@ -5,14 +5,14 @@ import * as path from 'path'
 test(async t => {
 	const args = await parseArgs([])
 
-	t.true(args.template === 'nextjs-templates/basic')
+	t.true(args.template === 'nextjs-templates/')
 	t.true(args.target === path.resolve('./'))
 })
 
 test(async t => {
 	const args = await parseArgs(['./my-next-app'])
 
-	t.true(args.template === 'nextjs-templates/basic')
+	t.true(args.template === 'nextjs-templates/')
 	t.true(args.target === path.resolve('./my-next-app'))
 })
 

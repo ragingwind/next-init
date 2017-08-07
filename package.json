@@ -34,6 +34,7 @@
 		"find-cache-dir": "^1.0.0",
 		"github-username": "^4.1.0",
 		"inquirer": "^3.2.1",
+		"inquirer-autocomplete-prompt": "^0.11.0",
 		"meow": "^3.7.0",
 		"mz": "^2.6.0",
 		"p-filter": "^1.0.0",

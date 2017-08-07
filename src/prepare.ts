@@ -7,19 +7,6 @@ import findCacheDir = require('find-cache-dir')
 import pFilter = require('p-filter')
 import u from './utils'
 
-// $ next-init
-// $ next-init ./my-next-app
-// $ next-init default
-// $ next-init default ./my-next-app
-// $ next-init /someone/someone-next-app
-// $ next-init /someone/someone-next-app ./my-next-app
-// $ next-init /next.js/examples/with-glamorous
-// $ next-init /next.js/examples/with-glamorous ./my-next-app
-// $ next-init --example
-// $ next-init --example ./my-next-app
-// $ next-init /next.js/examples/
-// $ next-init /next.js/examples/ ./my-next-app
-
 async function cacheWithGit(repo, target) {
 	try {
 		let res
@@ -28,9 +15,11 @@ async function cacheWithGit(repo, target) {
 			const cwd = process.cwd()
 
 			process.chdir(target)
+			console.log(`Starting pulling from ${repo}`)
 			res = await execa.shell('git pull origin master')
 			process.chdir(cwd)
 		} else {
+			console.log(`Starting clonning from ${repo}`)
 			res = await execa.shell(`git clone ${repo} ${target}`)
 		}
 
@@ -38,8 +27,9 @@ async function cacheWithGit(repo, target) {
 			throw new Error(res.stderr)
 		}
 	} catch(err) {
+		console.log(`Cleanup cached directory from ${target}. try it later`)
 		rimraf.sync(target)
-		throw new Error(`The template cache have some problems. Please retry it later, ${err.toString()}`)
+		throw err
 	}
 }
 
@@ -57,7 +47,7 @@ async function cacheDefaultTemplates(root, template) {
 async function cacheExamples(root, template) {
 	const cachedPath = path.resolve(path.join(root, 'next.js'))
 	await cacheWithGit(`https://github.com/zeit/next.js/`, cachedPath)
-	return `${cachedPath}/examples/${path.basename(template.replace('next.js/examples', ''))}`
+	return `${cachedPath}/examples/`
 }
 
 async function cacheUserTemplate(root, template) {
@@ -66,10 +56,9 @@ async function cacheUserTemplate(root, template) {
 	return cachedPath
 }
 
-export default async function (cacheName = 'next-init', args: any) {
+export default async function (args: any, cacheName = 'next-init') {
 	const cacheInfo = {
-		template: args.template,
-		templateName: path.basename(args.template),
+		templateName: '',
 		rootPath: findCacheDir({
 			name: cacheName,
 			create: true
@@ -79,14 +68,21 @@ export default async function (cacheName = 'next-init', args: any) {
 		templates: []
 	}
 
-	if (u.isExamplesPath(args.template)) {
-		cacheInfo.cachePath = await cacheExamples(cacheInfo.rootPath, args.template)
-		cacheInfo.templates = await readTemplateList(cacheInfo.cachePath.replace(cacheInfo.templateName, ''))
-	} else if (u.isPathString(args.template)) {
-		cacheInfo.cachePath = await cacheUserTemplate(cacheInfo.rootPath, args.template)
-	} else {
+	if (!u.isPathString(args.template)) {
+		throw new TypeError(`Template path has invalid format: ${args.template}`)
+	}
+
+	if (u.isDefaultTempaltePath(args.template)) {
 		cacheInfo.cachePath = await cacheDefaultTemplates(cacheInfo.rootPath, args.template)
 		cacheInfo.templates = await readTemplateList(cacheInfo.cachePath)
+		cacheInfo.templateName = args.template.replace(/nextjs-templates\/?/, '')
+	} else if (u.isExamplesPath(args.template)) {
+		cacheInfo.cachePath = await cacheExamples(cacheInfo.rootPath, args.template)
+		cacheInfo.templates = await readTemplateList(cacheInfo.cachePath.replace(cacheInfo.templateName, ''))
+		cacheInfo.templateName = args.template.replace(/next.js\/examples\/?/, '')
+	} else {
+		cacheInfo.cachePath = await cacheUserTemplate(cacheInfo.rootPath, args.template)
+		cacheInfo.templateName = args.template
 	}
 
 	return cacheInfo

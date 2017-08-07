@@ -3,6 +3,7 @@
 import meow = require('meow')
 import env from './env'
 import parseArgs from './parse-args'
+import prepare from './prepare'
 import prompt from './prompt'
 
 const cli = meow(`
@@ -18,14 +19,16 @@ const cli = meow(`
 	}
 })
 
-const template = cli.input[0]
-const target = cli.input[1]
-
 async function main() {
-	const args = await parseArgs(cli)
-	const answers = await prompt(await env())
+	try {
+		const args = await parseArgs(cli.input)
+		const cacheInfo = await prepare(args)
+		const answers = await prompt(await env(), {...args, ...cacheInfo})
 
-	console.log(answers)
+		console.log({...args, ...cacheInfo, ...answers})
+	} catch (err) {
+		console.error(err.toString())
+	}
 }
 
 main()
