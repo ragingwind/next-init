@@ -20,7 +20,8 @@ export default function (env: any, args: any) {
 	}]
 
 	if (args.templateName === '' && args.templates.length > 0) {
-		inquirer.registerPrompt('autocomplete', require('inquirer-autocomplete-prompt'))
+		inquirer.registerPrompt('autocomplete',
+			require('inquirer-autocomplete-prompt'))
 
 		prompts.unshift({
 			type: 'autocomplete',

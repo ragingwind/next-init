@@ -40,7 +40,7 @@ async function readTemplateList(root) {
 
 async function cacheDefaultTemplates(root, template) {
 	const cachedPath = path.resolve(path.join(root, 'nextjs-templates'))
-	await cacheWithGit(`https://${path.join('/github.com/next-init/nextjs-templates')}`, cachedPath)
+	await cacheWithGit(`https://${path.join('github.com/next-init/nextjs-templates')}`, cachedPath)
 	return cachedPath
 }
 
@@ -52,8 +52,8 @@ async function cacheExamples(root, template) {
 
 async function cacheUserTemplate(root, template) {
 	const cachedPath = path.resolve(path.join(root, template))
-	await cacheWithGit(`https://${path.join('/github.com/', template)}`, cachedPath)
-	return cachedPath
+	await cacheWithGit(`https://${path.join('github.com/', template)}`, cachedPath)
+	return root
 }
 
 export default async function (args: any, cacheName = 'next-init') {

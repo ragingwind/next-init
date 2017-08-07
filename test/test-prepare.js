@@ -19,6 +19,7 @@ test('nextjs-templates', async t => {
 	}, 'test-next-init')
 
 	t.true(await fs.exists(`${cacheRoot}/nextjs-templates/basic/package.json`))
+	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}/nextjs-templates`)) === 0)
 	t.true(cacheInfo.templateName === '')
 	t.true(cacheInfo.templates.indexOf('basic') >= 0)
 
@@ -64,7 +65,7 @@ test.serial('user/repo', async t => {
 		template: 'ragingwind/nextjs-hnpwa'
 	}, 'test-next-init')
 
-	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}/ragingwind/nextjs-hnpwa`)) === 0)
+	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}`)) === 0)
 	t.true(await fs.exists(`${cacheRoot}/ragingwind/nextjs-hnpwa/package.json`))
 	t.true(cacheInfo.templateName === 'ragingwind/nextjs-hnpwa')
 })
