@@ -13,4 +13,5 @@ test(async t => {
 
 	t.true(u !== undefined)
 	t.true(u.name !== undefined)
+	t.true(u.email !== undefined)
 })
