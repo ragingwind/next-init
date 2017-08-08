@@ -25,7 +25,7 @@ async function main() {
 		const args = await parseArgs(cli.input)
 		const cacheInfo = await prepare(args)
 		const answers = await prompt(await env(), {...args, ...cacheInfo})
-		create({...args, ...cacheInfo, ...answers})
+		await create({...args, ...cacheInfo, ...answers})
 	} catch (err) {
 		console.error(err.toString())
 	}
