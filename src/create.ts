@@ -5,6 +5,7 @@ import inquirer = require('inquirer')
 import template = require('lodash.template')
 import PQueue = require('p-queue')
 import globby = require('globby')
+import chalk = require('chalk')
 import u from './utils'
 
 async function check(target) {
@@ -53,12 +54,9 @@ function copy(args) {
 				return new Promise(async resolve => {
 					if (await isDirectory(f)) {
 						if (!await isExist(output)) {
-							console.log(`Creating a path, ${output}`)
 							await mkdir(output)
 						}
 					} else {
-						console.log(`Writing a file, ${output}`)
-
 						// prevent exepctions of irregular syntax
 						try {
 							const content = await fs.readFile(f)
@@ -72,18 +70,16 @@ function copy(args) {
 				})
 			}
 
-			console.log(`Adding task, ${f}`)
 			jobs.add(() => job().then())
 		})
 
-		jobs.onEmpty().then(() => {
-			resolve()
-		})
+		jobs.onEmpty().then(resolve)
 	})
 }
 
 export default async function (args) {
 	if (await check(args.target)) {
+		console.log(chalk`\nCreate a new Next.js app in {gray ${args.target} }`)
 		await copy(args)
 	}
 }

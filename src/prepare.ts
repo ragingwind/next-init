@@ -5,6 +5,8 @@ import rimraf = require('rimraf')
 import mkdirp = require('mkdirp')
 import findCacheDir = require('find-cache-dir')
 import pFilter = require('p-filter')
+import chalk = require('chalk')
+import log from './log'
 import u from './utils'
 
 async function cacheWithGit(repo, target) {
@@ -15,11 +17,11 @@ async function cacheWithGit(repo, target) {
 			const cwd = process.cwd()
 
 			process.chdir(target)
-			console.log(`Starting pulling from ${repo}`)
+			log.update(chalk`Starting pulling from {gray ${repo} }`)
 			res = await execa.shell('git pull origin master')
 			process.chdir(cwd)
 		} else {
-			console.log(`Starting clonning from ${repo}`)
+			log.update(chalk`Starting clonning from {gray ${repo} }`)
 			res = await execa.shell(`git clone ${repo} ${target}`)
 		}
 
@@ -27,7 +29,7 @@ async function cacheWithGit(repo, target) {
 			throw new Error(res.stderr)
 		}
 	} catch(err) {
-		console.log(`Cleanup cached directory from ${target}. try it later`)
+		log.update(chalk`Cleanup cached directory from {gray ${target} }. try it later`)
 		rimraf.sync(target)
 		throw err
 	}
@@ -68,6 +70,8 @@ export default async function (args: any, cacheName = 'next-init') {
 		templates: []
 	}
 
+	log.start(chalk`Preparing...`)
+
 	if (!u.isPathString(args.template)) {
 		throw new TypeError(`Template path has invalid format: ${args.template}`)
 	}
@@ -84,6 +88,8 @@ export default async function (args: any, cacheName = 'next-init') {
 		cacheInfo.cachePath = await cacheUserTemplate(cacheInfo.rootPath, args.template)
 		cacheInfo.templateName = args.template
 	}
+
+	log.stop()
 
 	return cacheInfo
 }
