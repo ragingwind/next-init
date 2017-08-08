@@ -63,7 +63,8 @@ export default async function (args: any, cacheName = 'next-init') {
 		templateName: '',
 		rootPath: findCacheDir({
 			name: cacheName,
-			create: true
+			create: true,
+			cwd: __dirname
 		}),
 		cacheName: cacheName,
 		cachePath: '',
