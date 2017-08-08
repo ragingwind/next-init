@@ -11,11 +11,11 @@ $ npm install -g next-init
 ## Examples
 
 ```sh
-# from a list of official tempalte to current or target path
+# from a list of official template to current or target path
 $ next-init
 $ next-init ./my-next-app
 
-# from an official tempalte, `basic`, to current or target path
+# from an official template, `basic`, to current or target path
 # same as `next init`
 $ next-init basic
 $ next-init basic ./my-next-app
@@ -33,7 +33,7 @@ $ next-init next.js/examples/with-glamorous ./my-next-app
 $ next-init next.js/examples/
 $ next-init next.js/examples/ ./my-next-app
 
-# get a list of official `tempaltes`
+# get a list of official `templates`
 $ next-init --list
 
 # get a list of official `examples`
