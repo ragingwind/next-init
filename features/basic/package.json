@@ -1,0 +1,19 @@
+{
+	"name": "<%= projectName %>",
+	"description": "<%= description %>",
+	"repository": "<%= user.name %>/<%= projectName %>",
+	"author": {
+		"name": "<%= user.name %>",
+		"email": "<%= user.email %>"
+	},
+	"dependencies": {
+		"next": "latest",
+		"react": "^15.4.2",
+		"react-dom": "^15.4.2"
+	},
+	"scripts": {
+		"dev": "next",
+		"build": "next build",
+		"start": "next start"
+	}
+}
