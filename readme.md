@@ -25,13 +25,13 @@ $ next-init basic ./my-next-app
 $ next-init someone/someone-next-app
 $ next-init someone/someone-next-app ./my-next-app
 
-# from an official named example, `with-glamorous`, to current or target path
-$ next-init next.js/examples/with-glamorous
-$ next-init next.js/examples/with-glamorous ./my-next-app
-
 # from a list of official examples to current or target path
 $ next-init next.js/examples/
 $ next-init next.js/examples/ ./my-next-app
+
+# from an official named example, `with-glamorous`, to current or target path
+$ next-init next.js/examples/with-glamorous
+$ next-init next.js/examples/with-glamorous ./my-next-app
 
 # get a list of official `templates`
 $ next-init --list
