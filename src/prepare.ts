@@ -1,38 +1,21 @@
 import path = require('path')
 import fs = require('mz/fs')
 import execa = require('execa')
-import rimraf = require('rimraf')
-import mkdirp = require('mkdirp')
-import findCacheDir = require('find-cache-dir')
 import pFilter = require('p-filter')
 import chalk = require('chalk')
+import cacheGithubRepo = require('cache-github-repo')
 import log from './log'
 import u from './utils'
 
-async function cacheWithGit(repo, target) {
-	try {
-		let res
+let forceUpdate = false
 
-		if (await fs.exists(target)) {
-			const cwd = process.cwd()
+function cacheWithGit(repo, target, cachePath) {
+	log.update(chalk`Start caching from {green ${repo} }`)
 
-			process.chdir(target)
-			log.update(chalk`Starting pulling from {gray ${repo} }`)
-			res = await execa.shell('git pull origin master')
-			process.chdir(cwd)
-		} else {
-			log.update(chalk`Starting clonning from {gray ${repo} }`)
-			res = await execa.shell(`git clone ${repo} ${target}`)
-		}
-
-		if (res.failed) {
-			throw new Error(res.stderr)
-		}
-	} catch(err) {
-		log.update(chalk`Cleanup cached directory from {gray ${target} }. try it later`)
-		rimraf.sync(target)
-		throw err
-	}
+	return cacheGithubRepo(repo, target, {
+		force: forceUpdate,
+		cachePath
+	})
 }
 
 async function readTemplateList(root) {
@@ -42,31 +25,28 @@ async function readTemplateList(root) {
 
 async function cacheDefaultTemplates(root, template) {
 	const cachedPath = path.resolve(path.join(root, 'nextjs-templates'))
-	await cacheWithGit(`https://${path.join('github.com/next-init/nextjs-templates')}`, cachedPath)
+	await cacheWithGit(`next-init/nextjs-templates`, cachedPath, root)
 	return cachedPath
 }
 
 async function cacheExamples(root, template) {
 	const cachedPath = path.resolve(path.join(root, 'next.js'))
-	await cacheWithGit(`https://github.com/zeit/next.js/`, cachedPath)
+	await cacheWithGit(`zeit/next.js`, cachedPath, root)
 	return `${cachedPath}/examples/`
 }
 
 async function cacheUserTemplate(root, template) {
 	const cachedPath = path.resolve(path.join(root, template))
-	await cacheWithGit(`https://${path.join('github.com/', template)}`, cachedPath)
-	return root
+	await cacheWithGit(template, cachedPath, root)
+	return path.resolve(root)
 }
 
-export default async function (args: any, cacheName = 'next-init') {
+export default async function (args: any) {
+	forceUpdate = args.force
+
 	const cacheInfo = {
 		templateName: '',
-		rootPath: findCacheDir({
-			name: cacheName,
-			create: true,
-			cwd: __dirname
-		}),
-		cacheName: cacheName,
+		rootPath: args.rootPath,
 		cachePath: '',
 		templates: []
 	}

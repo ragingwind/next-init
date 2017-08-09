@@ -25,7 +25,7 @@ export default function (env: any, args: any) {
 
 		prompts.unshift({
 			type: 'autocomplete',
-			name: 'template',
+			name: 'templateName',
 			message: 'Templates name?',
 			choices: args.templates,
 			source: (answers, input) => {

@@ -1,5 +1,5 @@
 import path = require('path')
-import fs = require('mz/fs')
+import fs = require('fs-extra')
 
 export default {
 	isStartWithPath: (t: string) => /^(\.{0,2})\//.test(t),
