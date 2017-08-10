@@ -34,7 +34,8 @@ async function main() {
 		const answers = await prompt(await env(), {...args, ...cacheInfo})
 		await create({...args, ...cacheInfo, ...answers})
 	} catch (err) {
-		console.error(err.toString())
+		console.error(`\nYou've got error: ${err.toString()}`)
+		process.exit(-1)
 	}
 }
 

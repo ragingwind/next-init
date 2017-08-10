@@ -11,7 +11,6 @@ let forceUpdate = false
 
 function cacheWithGit(repo, target, cachePath) {
 	log.update(chalk`Start caching from {green ${repo} }`)
-
 	return cacheGithubRepo(repo, target, {
 		force: forceUpdate,
 		cachePath
@@ -54,23 +53,26 @@ export default async function (args: any) {
 	log.start(chalk`Preparing...`)
 
 	if (!u.isPathString(args.template)) {
-		throw new TypeError(`Template path has invalid format: ${args.template}`)
+		throw new TypeError(chalk`Template path has invalid format: {green ${args.template} }`)
 	}
-
-	if (u.isDefaultTempaltePath(args.template)) {
-		cacheInfo.cachePath = await cacheDefaultTemplates(cacheInfo.rootPath, args.template)
-		cacheInfo.templates = await readTemplateList(cacheInfo.cachePath)
-		cacheInfo.templateName = args.template.replace(/nextjs-templates\/?/, '')
-	} else if (u.isExamplesPath(args.template)) {
-		cacheInfo.cachePath = await cacheExamples(cacheInfo.rootPath, args.template)
-		cacheInfo.templates = await readTemplateList(cacheInfo.cachePath.replace(cacheInfo.templateName, ''))
-		cacheInfo.templateName = args.template.replace(/next.js\/examples\/?/, '')
-	} else {
-		cacheInfo.cachePath = await cacheUserTemplate(cacheInfo.rootPath, args.template)
-		cacheInfo.templateName = args.template
+	try {
+		if (u.isDefaultTempaltePath(args.template)) {
+			cacheInfo.cachePath = await cacheDefaultTemplates(cacheInfo.rootPath, args.template)
+			cacheInfo.templates = await readTemplateList(cacheInfo.cachePath)
+			cacheInfo.templateName = args.template.replace(/nextjs-templates\/?/, '')
+		} else if (u.isExamplesPath(args.template)) {
+			cacheInfo.cachePath = await cacheExamples(cacheInfo.rootPath, args.template)
+			cacheInfo.templates = await readTemplateList(cacheInfo.cachePath.replace(cacheInfo.templateName, ''))
+			cacheInfo.templateName = args.template.replace(/next.js\/examples\/?/, '')
+		} else {
+			cacheInfo.cachePath = await cacheUserTemplate(cacheInfo.rootPath, args.template)
+			cacheInfo.templateName = args.template
+		}
+	} catch (err) {
+		throw new Error(chalk`Preparing failed {green ${err.toString()} }`)
+	} finally {
+		log.stop()
 	}
-
-	log.stop()
 
 	return cacheInfo
 }
