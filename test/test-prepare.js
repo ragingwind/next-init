@@ -4,15 +4,11 @@ import fs from 'fs-extra'
 import findCacheDir from 'find-cache-dir'
 import prepare from '../dist/prepare'
 
-const rootPath = './node_modules/.cache/test-next-init-prepare'
+const cacheRoot = './node_modules/.cache/test-next-init-prepare'
 
 test.before(async t => {
-	await fs.remove(path.resolve(rootPath))
-
-	findCacheDir({
-		name: 'test-next-init-prepare',
-		create: true
-	})
+	await fs.remove(path.resolve(cacheRoot))
+	await fs.ensureDir(path.resolve(cacheRoot))
 })
 
 test('nextjs-templates', async t => {
@@ -20,28 +16,28 @@ test('nextjs-templates', async t => {
 
 	cacheInfo = await prepare({
 		template: 'nextjs-templates/',
-		force: true,
-		rootPath
+		cacheRoot,
+		force: true
 	})
 
-	t.true(await fs.exists(`${rootPath}/nextjs-templates/basic/package.json`))
-	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${rootPath}/nextjs-templates`)) === 0)
+	t.true(await fs.exists(`${cacheRoot}/nextjs-templates/basic/package.json`))
+	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}/nextjs-templates`)) === 0)
 	t.true(cacheInfo.templateName === '')
 	t.true(cacheInfo.templates.indexOf('basic') >= 0)
 
 	cacheInfo = await prepare({
 		template: 'nextjs-templates/basic',
-		rootPath
+		cacheRoot
 	})
 
-	t.true(await fs.exists(`${rootPath}/nextjs-templates/basic/package.json`))
+	t.true(await fs.exists(`${cacheRoot}/nextjs-templates/basic/package.json`))
 	t.true(cacheInfo.templates.indexOf('basic') >= 0)
 	t.true(cacheInfo.templateName === 'basic')
 
 	try {
 		await prepare({
 			template: 'basic',
-			rootPath
+			cacheRoot
 		})
 	} catch (err) {
 		t.true(err !== undefined)
@@ -51,34 +47,36 @@ test('nextjs-templates', async t => {
 test('nextjs/examples', async t => {
 	let cacheInfo = await prepare({
 		template: 'next.js/examples',
-		force: true,
-		rootPath
+		cacheRoot,
+		force: true
 	})
 
-	t.true(await fs.exists(`${rootPath}/next.js/package.json`))
-	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${rootPath}/next.js/examples`)) === 0)
+	t.true(await fs.exists(`${cacheRoot}/next.js/package.json`))
+	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}/next.js`)) === 0)
+	t.true(cacheInfo.templatesPath.indexOf(path.resolve(`${cacheRoot}/next.js/examples`)) === 0)
 	t.true(cacheInfo.templates.indexOf('with-glamorous') > -1)
 	t.true(cacheInfo.templateName === '')
 
 	cacheInfo = await prepare({
 		template: 'next.js/examples/with-glamorous',
-		rootPath
+		cacheRoot
 	})
 
-	t.true(await fs.exists(`${rootPath}/next.js/examples/with-glamorous/package.json`))
-	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${rootPath}/next.js/examples`)) === 0)
+	t.true(await fs.exists(`${cacheRoot}/next.js/examples/with-glamorous/package.json`))
+	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}/next.js`)) === 0)
 	t.true(cacheInfo.templates.indexOf('with-glamorous') > -1)
 	t.true(cacheInfo.templateName === 'with-glamorous')
+	t.true(cacheInfo.templatesPath.indexOf(path.resolve(`${cacheRoot}/next.js/examples`)) === 0)
 })
 
 test('user/repo', async t => {
 	const cacheInfo = await prepare({
 		template: 'ragingwind/nextjs-hnpwa',
-		force: true,
-		rootPath
+		cacheRoot,
+		force: true
 	})
 
-	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${rootPath}`)) === 0)
-	t.true(await fs.exists(`${rootPath}/ragingwind/nextjs-hnpwa/package.json`))
+	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}`)) === 0)
+	t.true(await fs.exists(`${cacheRoot}/ragingwind/nextjs-hnpwa/package.json`))
 	t.true(cacheInfo.templateName === 'ragingwind/nextjs-hnpwa')
 })

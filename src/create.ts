@@ -23,60 +23,62 @@ async function check(target) {
 	return true
 }
 
-async function isFile(f) {
-	return (await fs.lstat(f)).isFile()
-}
+function copy({
+	args,
+	target,
+	templatesPath,
+	templateName
+}) {
+	if (!args || Object.keys(args).length === 0) {
+		throw new TypeError('Templating requires default arguments')
+	}
 
-async function isDirectory(f) {
-	return (await fs.lstat(f)).isDirectory()
-}
-
-async function isExist(f) {
-	let s
-	try {
-		s = await fs.lstat(f)
-	} catch (err) {}
-
-	return s && (s.isFile() || s.isDirectory())
-}
-
-function copy(args) {
 	return new Promise(async resolve => {
-		const src = path.join(args.cachePath, args.templateName)
-		const target = args.target
+		const src = path.join(templatesPath, templateName)
 		const jobs = new PQueue({concurrency: 2})
 		const files = await globby(path.join(src, '**/*'))
 
-		files.forEach(f => {
-			const output = path.join(target, f.replace(src, ''))
-			const job = () => {
-				return new Promise(async resolve => {
-					if (await isDirectory(f)) {
-						await fs.ensureDir(output)
-					} else {
-						// prevent exepctions of irregular syntax
-						try {
-							const content = await fs.readFile(f)
-							const compiled = template(content)
-							await fs.ensureDir(path.dirname(output))
-							await fs.writeFile(output, compiled(args))
-						} catch (err) {}
-					}
+		if (files.length === 0) {
+			resolve()
+			return
+		}
 
-					resolve()
+		jobs.onEmpty().then(resolve)
+
+		files.forEach(f => {
+			const output = path.resolve(path.join(target, f.replace(src, '')))
+			const job = () => {
+				return fs.lstat(f).then(stat => {
+					if (stat.isFile()) {
+						return fs.readFile(f).then(content => {
+							const compiled = template(content)
+							return fs.outputFile(output, compiled(args))
+						})
+					} else {
+						return fs.ensureDir(output)
+					}
 				})
 			}
 
 			jobs.add(() => job().then())
 		})
-
-		jobs.onEmpty().then(resolve)
 	})
 }
 
-export default async function (args) {
-	if (await check(args.target)) {
-		console.log(chalk`\nCreate a new Next.js app in {green ${args.target} }`)
-		await copy(args)
+export default async function ({
+	args,
+	target,
+	templatesPath,
+	templateName
+}) {
+	if (await check(target)) {
+		console.log(chalk`\nCreate a new Next.js app in {green ${target} }`)
+
+		await copy({
+			args,
+			target,
+			templatesPath,
+			templateName
+		})
 	}
 }

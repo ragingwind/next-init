@@ -4,8 +4,7 @@ import u from './utils'
 export default async function (input: Array<string>) {
 	const args = {
 		template: 'nextjs-templates/',
-		target: path.resolve('./'),
-		baseTarget: ''
+		target: path.resolve('./')
 	}
 
 	if (input.length === 1) {
@@ -26,8 +25,6 @@ export default async function (input: Array<string>) {
 	if (!u.isPathString(args.template)) {
 		args.template = `nextjs-templates/${args.template}`
 	}
-
-	args.baseTarget = path.basename(args.target)
 
 	return args
 }

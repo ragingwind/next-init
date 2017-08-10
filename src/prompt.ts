@@ -4,11 +4,14 @@ interface PropmptProps {
   [key: string]: any
 }
 
-export default function (env: any, args: any) {
+export default function (env: any, {
+	projectName,
+	templates
+}) {
 	const prompts: PropmptProps = [{
 		name: 'projectName',
 		message: 'Project name?',
-		default: args.baseTarget || env.projectName
+		default: projectName || env.projectName
 	}, {
 		name: 'description',
 		message: 'Module description?',
@@ -19,7 +22,7 @@ export default function (env: any, args: any) {
 		default: env.user.name
 	}]
 
-	if (args.templateName === '' && args.templates.length > 0) {
+	if (templates && templates.length > 0) {
 		inquirer.registerPrompt('autocomplete',
 			require('inquirer-autocomplete-prompt'))
 
@@ -27,12 +30,12 @@ export default function (env: any, args: any) {
 			type: 'autocomplete',
 			name: 'templateName',
 			message: 'Templates name?',
-			choices: args.templates,
+			choices: templates,
 			source: (answers, input) => {
 				return new Promise(function(resolve) {
 					resolve(input ?
-						args.templates.filter(t => t.indexOf(input) > -1) :
-						args.templates)
+						templates.filter(t => t.indexOf(input) > -1) :
+						templates)
 				})
 			},
 			filter: function (val) {
