@@ -1,6 +1,6 @@
 ![](https://avatars2.githubusercontent.com/u/30463846?v=4&u=b080ecd2d7d1226eb6e982cf1de875d4765e275d&s=200)
 
-# next-init [![Build Status](https://travis-ci.org/next-init/next-init.svg?branch=master)](https://travis-ci.org/next-init/next-init)
+# next-init
 
 > ✒ CLI for Next.js apps scaffolding from whatever
 
