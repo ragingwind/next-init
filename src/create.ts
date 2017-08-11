@@ -39,7 +39,7 @@ function copy({
 								const compiled = template(content)
 								return fs.outputFile(output, compiled(args))
 							} catch (err) {
-								throw err
+								return fs.outputFile(output, content)
 							}
 						})
 					} else {
