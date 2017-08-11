@@ -4,24 +4,7 @@ import inquirer = require('inquirer')
 import template = require('lodash.template')
 import PQueue = require('p-queue')
 import globby = require('globby')
-import chalk = require('chalk')
 import u from './utils'
-
-async function check(target) {
-	if (await fs.pathExists(target)) {
-		const answers = await inquirer.prompt({
-			type: 'confirm',
-			name: 'overwrite',
-			message: 'Target path is exist already, overwrite?',
-		})
-
-		return answers.overwrite
-	}
-
-	await fs.ensureDir(target)
-
-	return true
-}
 
 function copy({
 	args,
@@ -32,6 +15,8 @@ function copy({
 	if (!args || Object.keys(args).length === 0) {
 		throw new TypeError('Templating requires default arguments')
 	}
+
+	console.log(target, templatesPath, 'templateName', templateName)
 
 	return new Promise(async resolve => {
 		const src = path.join(templatesPath, templateName)
@@ -51,8 +36,11 @@ function copy({
 				return fs.lstat(f).then(stat => {
 					if (stat.isFile()) {
 						return fs.readFile(f).then(content => {
-							const compiled = template(content)
-							return fs.outputFile(output, compiled(args))
+							try {
+								const compiled = template(content)
+								return fs.outputFile(output, compiled(args))
+							} catch (err) {
+							}
 						})
 					} else {
 						return fs.ensureDir(output)
@@ -71,14 +59,12 @@ export default async function ({
 	templatesPath,
 	templateName
 }) {
-	if (await check(target)) {
-		console.log(chalk`\nCreate a new Next.js app in {green ${target} }`)
+	await fs.ensureDir(target)
 
-		await copy({
-			args,
-			target,
-			templatesPath,
-			templateName
-		})
-	}
+	await copy({
+		args,
+		target,
+		templatesPath,
+		templateName
+	})
 }

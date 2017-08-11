@@ -1,12 +1,14 @@
+import fs = require('fs-extra')
 import inquirer = require('inquirer')
 
 interface PropmptProps {
   [key: string]: any
 }
 
-export default function (env: any, {
+export default async function (env: any, {
 	projectName,
-	templates
+	templates,
+	target
 }) {
 	const prompts: PropmptProps = [{
 		name: 'projectName',
@@ -21,6 +23,14 @@ export default function (env: any, {
 		message: 'Username? (eg, Github)',
 		default: env.user.name
 	}]
+
+	if (await fs.pathExists(target)) {
+		prompts.push({
+			type: 'confirm',
+			name: 'overwrite',
+			message: 'Target path is exist already, overwrite?',
+		})
+	}
 
 	if (templates && templates.length > 0) {
 		inquirer.registerPrompt('autocomplete',

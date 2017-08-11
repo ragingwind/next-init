@@ -49,9 +49,7 @@ test('missing hit', async t => {
 
 	try {
 		await create(opts)
-	} catch (err) {
-
-	}
+	} catch (err) {}
 
 	t.pass()
 })
