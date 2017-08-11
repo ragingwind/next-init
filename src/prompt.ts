@@ -5,7 +5,7 @@ interface PropmptProps {
   [key: string]: any
 }
 
-export default async function (env: any, {
+export default function (env: any, {
 	projectName,
 	templates,
 	target
@@ -24,7 +24,7 @@ export default async function (env: any, {
 		default: env.user.name
 	}]
 
-	if (await fs.pathExists(target)) {
+	if (fs.pathExistsSync(target)) {
 		prompts.push({
 			type: 'confirm',
 			name: 'overwrite',

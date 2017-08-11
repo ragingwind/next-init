@@ -22,6 +22,7 @@ test(async t => {
 			name: 'test'
 		}
 	}, {})
+
 	await autosubmit(promise.ui)
 	t.true(await Promise.resolve(promise) !== undefined)
 });
