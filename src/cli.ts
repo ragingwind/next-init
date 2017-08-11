@@ -70,7 +70,15 @@ async function main() {
 				console.log(chalk`\n {green ${figures.tick} }Create a new Next.js app in {green ${ctx.args.target} }`)
 
 				ctx.answers = answers
-				return create({args: {...ctx.args, ...ctx.env} ,...ctx.args, ...ctx.cacheInfo, ...ctx.answers})
+				return create({
+					args: {
+						...ctx.args,
+						...ctx.env,
+						...ctx.answers
+					},
+					target: ctx.args.target,
+					...ctx.cacheInfo
+				})
 			})
 		})
 	}).catch(err => {
