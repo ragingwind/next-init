@@ -33,18 +33,18 @@ export default async function ({
 	}
 
 	if (u.isDefaultTempaltePath(template)) {
-		cacheInfo.repo = `next-init/nextjs-templates`
-		cacheInfo.cachePath = path.resolve(path.join(cacheRoot, 'nextjs-templates'))
-		cacheInfo.templateName = template.replace(/nextjs-templates\/?/, '')
-		cacheInfo.templatesPath = cacheInfo.cachePath
+		cacheInfo.repo = `next-init/templates`
+		cacheInfo.cachePath = path.resolve(path.join(cacheRoot, 'next-init'))
+		cacheInfo.templateName = template.replace(/next-init\/templates\/?/, '')
+		cacheInfo.templatesPath = ''
 	} else if (u.isExamplesPath(template)) {
 		cacheInfo.repo = `zeit/next.js`
 		cacheInfo.cachePath = path.resolve(path.join(cacheRoot, 'next.js'))
 		cacheInfo.templateName = template.replace(/next.js\/examples\/?/, '')
-		cacheInfo.templatesPath = `${cacheInfo.cachePath}/examples/`
+		cacheInfo.templatesPath = `examples`
 	} else {
 		cacheInfo.repo = template
-		cacheInfo.cachePath = path.resolve(path.join(cacheRoot, template))
+		cacheInfo.cachePath = path.resolve(cacheRoot)
 		cacheInfo.templateName = template
 		cacheInfo.templatesPath = ''
 	}
@@ -57,7 +57,7 @@ export default async function ({
 		}
 
 		if (cacheInfo.templatesPath !== '') {
-			cacheInfo.templates = await readTemplateList(cacheInfo.templatesPath)
+			cacheInfo.templates = await readTemplateList(path.join(cacheInfo.cachePath, cacheInfo.templatesPath))
 		}
 	} catch (err) {
 		throw new Error(chalk`Preparing failed {green ${err.toString()} }`)

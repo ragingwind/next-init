@@ -3,7 +3,7 @@ import u from './utils'
 
 export default async function (input: Array<string>) {
 	const args = {
-		template: 'nextjs-templates/',
+		template: 'next-init/templates/default',
 		target: path.resolve('./')
 	}
 
@@ -23,7 +23,7 @@ export default async function (input: Array<string>) {
 
 	// consider that official template even if it's not path style
 	if (!u.isPathString(args.template)) {
-		args.template = `nextjs-templates/${args.template}`
+		throw new TypeError(`Template has invalid format. ${args.template}`)
 	}
 
 	return args

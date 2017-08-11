@@ -10,36 +10,27 @@
 $ npm install -g next-init
 ```
 
+## Usage
+
+```
+next-init --help
+```
+
 ## Examples
 
 ```sh
-# from a list of official template to current or target path
+# default template
 $ next-init
 $ next-init ./my-next-app
 
-# from an official template, `basic`, to current or target path
-# same as `next init`
-$ next-init basic
-$ next-init basic ./my-next-app
+# community boilerplates, inspired from `vue init`
+$ next-init username/username-next-app
+$ next-init username/someone-next-app ./my-next-app
 
-# from a boilerplate or a custom template to current or target path
-# inspired from `vue init`
-$ next-init someone/someone-next-app
-$ next-init someone/someone-next-app ./my-next-app
-
-# from a list of official examples to current or target path
+# official examples to current or target path
 $ next-init next.js/examples/
 $ next-init next.js/examples/ ./my-next-app
-
-# from an official named example, `with-glamorous`, to current or target path
-$ next-init next.js/examples/with-glamorous
 $ next-init next.js/examples/with-glamorous ./my-next-app
-
-# get a list of official `templates`
-$ next-init --list
-
-# get a list of official `examples`
-$ next-init next.js/examples --list
 
 # show help
 $ next-init --help

@@ -9,6 +9,7 @@ import u from './utils'
 function copy({
 	args,
 	target,
+	cachePath,
 	templatesPath,
 	templateName
 }) {
@@ -17,7 +18,7 @@ function copy({
 	}
 
 	return new Promise(async resolve => {
-		const src = path.join(templatesPath, templateName)
+		const src = path.join(cachePath, templatesPath, templateName)
 		const jobs = new PQueue({concurrency: 2})
 		const files = await globby(path.join(src, '**/*'))
 
@@ -38,6 +39,7 @@ function copy({
 								const compiled = template(content)
 								return fs.outputFile(output, compiled(args))
 							} catch (err) {
+								throw err
 							}
 						})
 					} else {
@@ -54,6 +56,7 @@ function copy({
 export default async function ({
 	args,
 	target,
+	cachePath,
 	templatesPath,
 	templateName
 }) {
@@ -62,6 +65,7 @@ export default async function ({
 	await copy({
 		args,
 		target,
+		cachePath,
 		templatesPath,
 		templateName
 	})

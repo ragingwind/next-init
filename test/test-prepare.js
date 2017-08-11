@@ -15,28 +15,19 @@ test('nextjs-templates', async t => {
 	let cacheInfo
 
 	cacheInfo = await prepare({
-		template: 'nextjs-templates/',
+		template: 'next-init/templates/default',
 		cacheRoot,
 		force: true
 	})
 
-	t.true(await fs.exists(`${cacheRoot}/nextjs-templates/basic/package.json`))
-	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}/nextjs-templates`)) === 0)
-	t.true(cacheInfo.templateName === '')
-	t.true(cacheInfo.templates.indexOf('basic') >= 0)
-
-	cacheInfo = await prepare({
-		template: 'nextjs-templates/basic',
-		cacheRoot
-	})
-
-	t.true(await fs.exists(`${cacheRoot}/nextjs-templates/basic/package.json`))
-	t.true(cacheInfo.templates.indexOf('basic') >= 0)
-	t.true(cacheInfo.templateName === 'basic')
+	t.true(await fs.exists(`${cacheRoot}/next-init/default/package.json`))
+	t.true(cacheInfo.cachePath.indexOf(path.resolve(`${cacheRoot}/next-init`)) === 0)
+	t.true(cacheInfo.templateName === 'default')
+	t.true(cacheInfo.templates.indexOf('default') >= 0)
 
 	try {
 		await prepare({
-			template: 'basic',
+			template: 'default',
 			cacheRoot
 		})
 	} catch (err) {

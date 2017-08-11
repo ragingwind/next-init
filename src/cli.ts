@@ -14,16 +14,22 @@ import create from './create'
 
 const cli = meow(`
 	Usage
-
-	Options
+		$ next-init <template> <dest>
 
 	Examples
+		# default template
 		$ next-init
-`, {
-	alias: {
-		'e': 'example'
-	}
-})
+		$ next-init ./my-next-app
+
+		# community boilerplates
+		$ next-init username/repo
+		$ next-init username/repo ./my-next-app
+
+		# official examples to current or target path
+		$ next-init next.js/examples/
+		$ next-init next.js/examples/ ./my-next-app
+		$ next-init next.js/examples/with-glamorous ./my-next-app
+`)
 
 async function main() {
 	const cacheRoot = findCacheDir({
@@ -31,34 +37,6 @@ async function main() {
 		create: true,
 		cwd: __dirname
 	})
-
-	// const envInfo = await env()
-
-	// let cacheInfo
-
-		// const cacheInfo = await prepare({
-		// 	template: args.template,
-		// 	cacheRoot: cacheRoot,
-		// 	force: cli.flags.force,
-		// })
-
-		// const answers = await prompt(await env(), {
-		// 	projectName: path.basename(args.target),
-		// 	templates: cacheInfo.templates,
-		// target
-		// })
-
-		// await create({...args, ...cacheInfo, ...answers})
-
-	// const args = await
-	// const prepare = new CacheManager(tempalte, ...)
-	// const updated =
-
-	// const answers = await prompt(await env(), {
-	// 	projectName: path.basename(args.target),
-	// 	templates: cacheInfo.templates,
-	// 	target: args.target
-	// })
 
 	const tasks = new Listr([{
 		title: 'Preparing...',
@@ -73,7 +51,6 @@ async function main() {
 				force: cli.flags.force
 			}).then(cacheInfo => {
 				ctx.cacheInfo = cacheInfo
-				console.log(cacheInfo)
 				const updates = cacheInfo.update ? 'Updates has been completed' : 'No updates'
 				const template = ctx.args.template.replace(/\/$/, '')
 				task.title = `${updates} for ${template}`
@@ -82,9 +59,10 @@ async function main() {
 	}])
 
 	tasks.run().then(ctx => {
-		return env().then(e => {
+		return env().then(env => {
+			ctx.env = env
 			console.log('')
-			return prompt(e, {
+			return prompt(env, {
 				projectName: path.basename(ctx.args.target),
 				templates: ctx.cacheInfo.templates,
 				target: ctx.args.target
@@ -92,7 +70,7 @@ async function main() {
 				console.log(chalk`\n {green ${figures.tick} }Create a new Next.js app in {green ${ctx.args.target} }`)
 
 				ctx.answers = answers
-				return create({args: ctx.args,...ctx.args, ...ctx.cacheInfo, ...ctx.answers})
+				return create({args: {...ctx.args, ...ctx.env} ,...ctx.args, ...ctx.cacheInfo, ...ctx.answers})
 			})
 		})
 	}).catch(err => {

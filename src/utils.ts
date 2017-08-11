@@ -11,5 +11,5 @@ export default {
 	isPathString: (t: string) => t.indexOf('/') > 0,
 	trimSlash: (t: string) => t.replace(/^\//, '').replace(/$\//, ''),
 	isExamplesPath: (t: string) => /^next.js\/examples/.test(t),
-	isDefaultTempaltePath: (t: string) => /^nextjs-templates\//.test(t)
+	isDefaultTempaltePath: (t: string) => /^next-init\/templates\//.test(t)
 }
