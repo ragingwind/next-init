@@ -16,8 +16,6 @@ function copy({
 		throw new TypeError('Templating requires default arguments')
 	}
 
-	console.log(target, templatesPath, 'templateName', templateName)
-
 	return new Promise(async resolve => {
 		const src = path.join(templatesPath, templateName)
 		const jobs = new PQueue({concurrency: 2})
