@@ -44,8 +44,8 @@ export default async function ({
 		cacheInfo.templatesPath = `examples`
 	} else {
 		cacheInfo.repo = template
-		cacheInfo.cachePath = path.resolve(cacheRoot)
-		cacheInfo.templateName = template
+		cacheInfo.cachePath = path.resolve(cacheRoot, template)
+		cacheInfo.templateName = ''
 		cacheInfo.templatesPath = ''
 	}
 

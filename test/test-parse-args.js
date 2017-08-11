@@ -17,19 +17,6 @@ test(async t => {
 })
 
 test(async t => {
-	const args = await parseArgs(['default'])
-
-	t.true(args.template === 'next-init/templates/default')
-})
-
-test(async t => {
-	const args = await parseArgs(['default', './my-next-app'])
-
-	t.true(args.template === 'next-init/templates/default')
-	t.true(args.target === path.resolve('./my-next-app'))
-})
-
-test(async t => {
 	const args = await parseArgs(['someone/someone-next-app'])
 
 	t.true(args.template === 'someone/someone-next-app')

@@ -5,6 +5,7 @@ import findCacheDir from 'find-cache-dir'
 import create from '../dist/create'
 import env from '../dist/env'
 
+const cachePath = ''
 const templatesPath = './features'
 const templateName = 'basic'
 const target = './node_modules/.cache/test-next-init-create/basic'
@@ -22,6 +23,7 @@ test(async t => {
 	const e = await env()
 	const opts = {
 		args: e,
+		cachePath,
 		templatesPath,
 		templateName,
 		target,
@@ -41,6 +43,7 @@ test('missing hit', async t => {
 	const e = await env()
 	const opts = {
 		args: e,
+		cachePath,
 		templatesPath: './features-wrong',
 		templateName: '',
 		target: './node_modules/.cache/test-next-init-create/basic-wrong'
