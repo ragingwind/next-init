@@ -13,7 +13,7 @@ export default function (env: any, {
 	const prompts: PropmptProps = [{
 		name: 'projectName',
 		message: 'Project name?',
-		default: projectName || env.projectName
+		default: env.projectName || projectName
 	}, {
 		name: 'description',
 		message: 'Module description?',
