@@ -67,6 +67,10 @@ async function main() {
 				templates: ctx.cacheInfo.templates,
 				target: ctx.args.target
 			}).then(answers => {
+				if (answers.overwrite === false) {
+					return
+				}
+
 				console.log(chalk`\n {green ${figures.tick} }Create a new Next.js app in {green ${ctx.args.target} }`)
 
 				ctx.answers = answers
