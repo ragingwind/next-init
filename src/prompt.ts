@@ -29,6 +29,7 @@ export default function (env: any, {
 			type: 'confirm',
 			name: 'overwrite',
 			message: 'Target path is exist already, overwrite?',
+			default: true
 		})
 	}
 
