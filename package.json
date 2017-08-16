@@ -10,7 +10,10 @@
 		"url": "http://ragingwind.me"
 	},
 	"bin": {
-		"next-init": "./dist/cli.js"
+		"next-init": "./dist/next-init.js",
+		"next-dev": "./dist/next-dev.js",
+		"next-start": "./dist/next-start.js",
+		"next-build": "./dist/next-build.js"
 	},
 	"engines": {
 		"node": ">=6"
@@ -47,6 +50,7 @@
 		"ora": "^1.3.0",
 		"p-filter": "^1.0.0",
 		"p-queue": "^1.1.0",
+		"read-pkg": "^2.0.0",
 		"superb": "^1.3.0",
 		"username": "^3.0.0"
 	},

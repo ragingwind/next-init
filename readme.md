@@ -2,7 +2,7 @@
 
 # next-init
 
-> ✒ CLI for Next.js apps scaffolding from whatever
+> CLI for Next.js apps scaffolding from whatever
 
 ## Install
 
@@ -34,6 +34,21 @@ $ next-init next.js/examples/with-glamorous ./my-next-app
 
 # show help
 $ next-init --help
+```
+
+## Alias
+
+next-init supports alias of next commands. those of registered global scope commands will execute next bin in current path after discoverying in local path of `node_modules`
+
+```sh
+# equivalent command of `next dev`
+next-dev
+
+# equivalent command of `next start`
+next-start
+
+# equivalent command of `next build`
+next-build
 ```
 
 ## License
