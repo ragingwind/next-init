@@ -1,5 +1,5 @@
 import path = require('path')
-import fs = require('mz/fs')
+import fs = require('fs-extra')
 import execa = require('execa')
 import pFilter = require('p-filter')
 import chalk = require('chalk')
