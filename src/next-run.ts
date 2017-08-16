@@ -20,11 +20,7 @@ function existNextBin() {
 }
 
 function runNextBin(subcmd) {
-	if (subcmd) {
-		subcmd = [subcmd]
-	}
-
-	child.fork(`${nextBin}`, subcmd)
+	child.fork(`${nextBin}`, subcmd ? [subcmd] : [])
 }
 
 export default async function (subcmd = '') {
