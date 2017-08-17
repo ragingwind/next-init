@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import path = require('path')
-import meow = require('meow')
+import mri = require('mri')
 import findCacheDir = require('find-cache-dir')
 import Listr = require('listr')
 import chalk = require('chalk')
@@ -13,26 +13,36 @@ import prompt from './prompt'
 import create from './create'
 import u from './utils'
 
-const cli = meow(`
-	Usage
-		$ next-init <template> <dest>
+const args = process.argv.slice(2);
+const help = `
+Usage
+  $ next-init <template> <dest> <options>
 
-	Examples
-		# default template
-		$ next-init
-		$ next-init ./my-next-app
+Examples
+  # default template
+  $ next-init
+  $ next-init ./my-next-app
 
-		# community boilerplates
-		$ next-init username/repo
-		$ next-init username/repo ./my-next-app
+  # community boilerplates
+  $ next-init username/repo
+  $ next-init username/repo ./my-next-app
 
-		# official examples to current or target path
-		$ next-init next.js/examples/
-		$ next-init next.js/examples/ ./my-next-app
-		$ next-init next.js/examples/with-glamorous ./my-next-app
-`)
+  # official examples to current or target path
+  $ next-init next.js/examples/
+  $ next-init next.js/examples/ ./my-next-app
+  $ next-init next.js/examples/with-glamorous ./my-next-app
+
+Options
+  force    force update target template`
 
 async function main() {
+	const cli = mri(process.argv.slice(2))
+
+	if (cli.help) {
+		console.log(help)
+		return
+	}
+
 	const cacheRoot = findCacheDir({
 		name: 'next-init',
 		create: true,
@@ -41,7 +51,7 @@ async function main() {
 
 	const tasks = new Listr([{
 		title: 'Preparing...',
-		task: async ctx => ctx.args = await parseArgs(cli.input)
+		task: async ctx => ctx.args = await parseArgs(cli._)
 	}, {
 		title: 'Checking the template project',
 		task: async (ctx, task) => {
@@ -52,7 +62,7 @@ async function main() {
 			ctx.cacheInfo = await prepare({
 				template: ctx.args.template,
 				cacheRoot: cacheRoot,
-				force: cli.flags.force
+				force: cli.force
 			})
 
 			if (!u.isDefaultTempaltePath(ctx.args.template)) {
