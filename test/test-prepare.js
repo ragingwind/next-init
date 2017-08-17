@@ -49,7 +49,7 @@ test('nextjs/examples', async t => {
 	})
 
 	t.true(await fs.exists(`${cacheRoot}/next.js/examples/with-glamorous/package.json`))
-	t.true(cacheInfo.templates.indexOf('with-glamorous') > -1)
+	t.true(cacheInfo.templates.indexOf('with-glamorous') === -1)
 	t.true(cacheInfo.templatePath === path.resolve(`${cacheRoot}/next.js/examples/with-glamorous`))
 })
 
