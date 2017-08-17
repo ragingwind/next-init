@@ -11,6 +11,7 @@ import parseArgs from './parse-args'
 import prepare from './prepare'
 import prompt from './prompt'
 import create from './create'
+import u from './utils'
 
 const cli = meow(`
 	Usage
@@ -40,55 +41,60 @@ async function main() {
 
 	const tasks = new Listr([{
 		title: 'Preparing...',
-		task: ctx => parseArgs(cli.input).then(args => ctx.args = args)
+		task: async ctx => ctx.args = await parseArgs(cli.input)
 	}, {
-		title: 'Checking the cache',
-		task: (ctx, task) => {
-			task.title = `Checking the updates of ${ctx.args.template.replace(/\/$/, '')}`
-			return prepare({
+		title: 'Checking the template project',
+		task: async (ctx, task) => {
+			if (!u.isDefaultTempaltePath(ctx.args.template)) {
+				task.title = `Checking the updates of ${ctx.args.template.replace(/\/$/, '')}`
+			}
+
+			ctx.cacheInfo = await prepare({
 				template: ctx.args.template,
 				cacheRoot: cacheRoot,
 				force: cli.flags.force
-			}).then(cacheInfo => {
-				ctx.cacheInfo = cacheInfo
-
-				task.title = `${cacheInfo.update ? 'Updates has been completed' : 'Latest updates'} for ${ctx.args.template.replace(/\/$/, '')}`
 			})
+
+			if (!u.isDefaultTempaltePath(ctx.args.template)) {
+				task.title = `${ctx.cacheInfo.update ? 'Updates has been completed' : 'Latest updates'} for ${ctx.args.template.replace(/\/$/, '')}`
+			}
 		}
 	}])
 
-	tasks.run().then(ctx => {
-		return env().then(env => {
-			ctx.args = {...ctx.args, ...env}
+	const envInfo = await env()
+	const ctx = await tasks.run()
+	let answers
 
-			console.log('')
-			return prompt(env, {
-				projectName: path.basename(ctx.args.target),
-				templates: ctx.cacheInfo.templates,
-				target: ctx.args.target
-			}).then(answers => {
-				if (answers.overwrite === false) {
-					return
-				}
+	// ctx.args = {...ctx.args, ...envInfo}
+	// add empty line
+	console.log('')
 
-				// update template path with answered tempate name in the cached list
-				if (answers.templateName) {
-					ctx.cacheInfo.templatePath = path.join(ctx.cacheInfo.templatePath, answers.templateName)
-				}
+	answers = await prompt({
+		args: {...ctx.args, ...envInfo},
+		templates: ctx.cacheInfo.templates
+	})
 
-				console.log(chalk`\n {green ${figures.tick} }Create a new Next.js app in {green ${ctx.args.target} }`)
+	if (answers.overwrite === false) {
+		return
+	}
 
-				// ctx.answers = answers
-				return create({
-					args: {...ctx.args, ...answers},
-					cacheInfo: ctx.cacheInfo
-				})
-			})
+	// update template path with answered tempate name in the cached list
+	if (answers.templateName) {
+		ctx.cacheInfo.templatePath = path.join(ctx.cacheInfo.templatePath, answers.templateName)
+	}
+
+	try {
+		// ctx.answers = answers
+		console.log(chalk`\n {green ${figures.tick} }Create a new Next.js app in {green ${ctx.args.target} }`)
+
+		await create({
+			args: {...ctx.args, ...envInfo, ...answers},
+			cacheInfo: ctx.cacheInfo
 		})
-	}).catch(err => {
+	} catch (err) {
 		console.error(chalk`\n {red ${figures.cross} }${err.stack}`)
 		process.exit(-1)
-	})
+	}
 }
 
 main()

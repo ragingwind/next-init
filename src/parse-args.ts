@@ -8,10 +8,10 @@ export default async function (input: Array<string>) {
 	}
 
 	if (input.length === 1) {
-		const checkPath = async t => await u.isLocalPath(t) ||
+		const isLocalPaths = async t => await u.isLocalPath(t) ||
 			await u.isLocalPath(path.dirname(path.resolve(t)))
 
-		if (u.isStartWithPath(input[0]) && checkPath(input[0])) {
+		if (u.isStartWithPath(input[0]) && isLocalPaths(input[0])) {
 			args.target = path.resolve(input[0])
 		} else {
 			args.template = input[0]

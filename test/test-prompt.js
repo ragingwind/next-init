@@ -16,10 +16,13 @@ function autosubmit(ui) {
 
 test(async t => {
 	const promise = prompt({
-		projectName: 'test',
-		description: 'description',
-		user: {
-			name: 'test'
+		args: {
+			target: './test',
+			projectName: 'test',
+			description: 'description',
+			user: {
+				name: 'test'
+			}
 		}
 	}, {})
 

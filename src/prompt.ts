@@ -1,30 +1,36 @@
+import path = require('path')
 import fs = require('fs-extra')
 import inquirer = require('inquirer')
+import u from './utils'
 
 interface PropmptProps {
   [key: string]: any
 }
 
-export default function (env: any, {
-	projectName,
-	templates,
-	target
+export default function ({
+	args,
+	templates
 }) {
-	const prompts: PropmptProps = [{
-		name: 'projectName',
-		message: 'Project name?',
-		default: projectName || env.projectName
-	}, {
-		name: 'description',
-		message: 'Module description?',
-		default: env.description
-	}, {
-		name: 'username',
-		message: 'Username? (eg, Github)',
-		default: env.user.name
-	}]
+	const projectName = path.basename(args.target)
+	let prompts = []
 
-	if (fs.pathExistsSync(target)) {
+	if (!u.isExamplesPath(args.template)) {
+		prompts = [{
+			name: 'projectName',
+			message: 'Project name?',
+			default: path.basename(args.target)
+		}, {
+			name: 'description',
+			message: 'Module description?',
+			default: args.description
+		}, {
+			name: 'username',
+			message: 'Username? (eg, Github)',
+			default: args.user.name
+		}]
+	}
+
+	if (fs.pathExistsSync(args.target)) {
 		prompts.push({
 			type: 'confirm',
 			name: 'overwrite',
