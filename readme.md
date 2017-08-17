@@ -23,7 +23,7 @@ next-init --help
 $ next-init
 $ next-init ./my-next-app
 
-# community boilerplates, inspired from `vue init`
+# community template, inspired from `vue init`
 $ next-init username/username-next-app
 $ next-init username/someone-next-app ./my-next-app
 
@@ -31,9 +31,6 @@ $ next-init username/someone-next-app ./my-next-app
 $ next-init next.js/examples/
 $ next-init next.js/examples/ ./my-next-app
 $ next-init next.js/examples/with-glamorous ./my-next-app
-
-# show help
-$ next-init --help
 ```
 
 ## Alias
