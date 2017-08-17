@@ -56,7 +56,12 @@ export default async function ({
 			}
 
 			if (u.isExamplesPath(template)) {
-				cacheInfo.templates = await readTemplateList(path.join(cacheInfo.repoLocalPath, 'examples'))
+				const tpl = template.replace(/next.js\/examples\/?/, '')
+				const templates = await readTemplateList(path.join(cacheInfo.repoLocalPath, 'examples'))
+
+				if (tpl.length === 0 || templates.indexOf(tpl) === -1) {
+					cacheInfo.templates = templates
+				}
 			}
 		} catch (err) {
 			throw new Error(chalk`Preparing failed {green ${err.toString()} }`)
