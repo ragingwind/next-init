@@ -9,18 +9,15 @@ import u from './utils'
 function copy({
 	args,
 	target,
-	cachePath,
-	templatesPath,
-	templateName
+	templatePath
 }) {
 	if (!args || Object.keys(args).length === 0) {
 		throw new TypeError('Templating requires default arguments')
 	}
 
 	return new Promise(async resolve => {
-		const src = path.join(cachePath, templatesPath, templateName)
 		const jobs = new PQueue({concurrency: 2})
-		const files = await globby(path.join(src, '**/*'))
+		const files = await globby(path.join(templatePath, '**/**'), {dot: true})
 
 		if (files.length === 0) {
 			resolve()
@@ -30,7 +27,7 @@ function copy({
 		jobs.onEmpty().then(resolve)
 
 		files.forEach(f => {
-			const output = path.resolve(path.join(target, f.replace(src, '')))
+			const output = path.resolve(path.join(target, f.replace(templatePath, '')))
 			const job = () => {
 				return fs.lstat(f).then(stat => {
 					if (stat.isFile()) {
@@ -55,18 +52,13 @@ function copy({
 
 export default async function ({
 	args,
-	target,
-	cachePath,
-	templatesPath,
-	templateName
+	cacheInfo
 }) {
-	await fs.ensureDir(target)
+	await fs.ensureDir(args.target)
 
 	await copy({
 		args,
-		target,
-		cachePath,
-		templatesPath,
-		templateName
+		target: args.target,
+		templatePath: cacheInfo.templatePath
 	})
 }

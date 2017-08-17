@@ -5,11 +5,6 @@ import findCacheDir from 'find-cache-dir'
 import create from '../dist/create'
 import env from '../dist/env'
 
-const cachePath = ''
-const templatesPath = './features'
-const templateName = 'basic'
-const target = './node_modules/.cache/test-next-init-create/basic'
-
 test.before(async t => {
 	await fs.remove(path.resolve('./node_modules/.cache/test-next-init-create'))
 
@@ -20,15 +15,20 @@ test.before(async t => {
 })
 
 test(async t => {
-	const e = await env()
-	const opts = {
-		args: e,
-		cachePath,
-		templatesPath,
-		templateName,
-		target,
+	const args = {
+		target: './node_modules/.cache/test-next-init-create/basic'
 	}
-	const output = path.resolve(target)
+
+	const cacheInfo = {
+		templatePath: path.resolve('./template')
+	}
+
+	const opts = {
+		args: Object.assign(args, await env()),
+		cacheInfo
+	}
+
+	const output = path.resolve(args.target)
 
 	await create(opts)
 
@@ -36,23 +36,26 @@ test(async t => {
 	t.true(stat.isDirectory())
 
 	const pkg = await fs.readFile(path.join(output, 'package.json'))
-	t.true(pkg.toString().indexOf(e.user.name) > 0)
+	t.true(pkg.toString().indexOf(args.user.name) > 0)
 })
 
 test('missing hit', async t => {
-	const e = await env()
-	const opts = {
-		args: e,
-		cachePath,
-		templatesPath: './features-wrong',
-		templateName: '',
+	const args = {
 		target: './node_modules/.cache/test-next-init-create/basic-wrong'
 	}
-	const output = path.resolve(target)
+
+	const cacheInfo = {
+		templatePath: './template-wrong'
+	}
+
+	const opts = {
+		args: Object.assign(args, await env()),
+		cacheInfo
+	}
 
 	try {
 		await create(opts)
-	} catch (err) {}
-
-	t.pass()
+	} catch (err) {
+		t.pass()
+	}
 })

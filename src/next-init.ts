@@ -51,16 +51,16 @@ async function main() {
 				force: cli.flags.force
 			}).then(cacheInfo => {
 				ctx.cacheInfo = cacheInfo
-				const updates = cacheInfo.update ? 'Updates has been completed' : 'No updates'
-				const template = ctx.args.template.replace(/\/$/, '')
-				task.title = `${updates} for ${template}`
+
+				task.title = `${cacheInfo.update ? 'Updates has been completed' : 'Latest updates'} for ${ctx.args.template.replace(/\/$/, '')}`
 			})
 		}
 	}])
 
 	tasks.run().then(ctx => {
 		return env().then(env => {
-			ctx.env = env
+			ctx.args = {...ctx.args, ...env}
+
 			console.log('')
 			return prompt(env, {
 				projectName: path.basename(ctx.args.target),
@@ -71,17 +71,17 @@ async function main() {
 					return
 				}
 
+				// update template path with answered tempate name in the cached list
+				if (answers.templateName) {
+					ctx.cacheInfo.templatePath = path.join(ctx.cacheInfo.templatePath, answers.templateName)
+				}
+
 				console.log(chalk`\n {green ${figures.tick} }Create a new Next.js app in {green ${ctx.args.target} }`)
 
-				ctx.answers = answers
+				// ctx.answers = answers
 				return create({
-					args: {
-						...ctx.args,
-						...ctx.env,
-						...ctx.answers
-					},
-					target: ctx.args.target,
-					...ctx.cacheInfo
+					args: {...ctx.args, ...answers},
+					cacheInfo: ctx.cacheInfo
 				})
 			})
 		})

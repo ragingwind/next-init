@@ -20,9 +20,8 @@ export default async function ({
 
 	const cacheInfo = {
 		repo: '',
-		cachePath: '',
-		templateName: '',
-		templatesPath: '',
+		repoLocalPath: '',
+		templatePath: '',
 		templates: [],
 		update: false,
 		force: false
@@ -34,33 +33,34 @@ export default async function ({
 
 	if (u.isDefaultTempaltePath(template)) {
 		cacheInfo.repo = `next-init/templates`
-		cacheInfo.cachePath = path.resolve(path.join(cacheRoot, 'next-init'))
-		cacheInfo.templateName = template.replace(/next-init\/templates\/?/, '')
-		cacheInfo.templatesPath = ''
-	} else if (u.isExamplesPath(template)) {
-		cacheInfo.repo = `zeit/next.js`
-		cacheInfo.cachePath = path.resolve(path.join(cacheRoot, 'next.js'))
-		cacheInfo.templateName = template.replace(/next.js\/examples\/?/, '')
-		cacheInfo.templatesPath = `examples`
+		cacheInfo.templatePath = path.resolve(__dirname, '../template')
 	} else {
-		cacheInfo.repo = template
-		cacheInfo.cachePath = path.resolve(cacheRoot, template)
-		cacheInfo.templateName = ''
-		cacheInfo.templatesPath = ''
-	}
-
-	try {
-		cacheInfo.update = await cache.updatable(cacheInfo.repo, cacheRoot)
-
-		if (cacheInfo.force || cacheInfo.update) {
-			await cache.cache(cacheInfo.repo, cacheInfo.cachePath)
+		if (u.isExamplesPath(template)) {
+			cacheInfo.repo = `zeit/next.js`
+			cacheInfo.repoLocalPath = path.resolve(path.join(cacheRoot, 'next.js'))
+			cacheInfo.templatePath = path.resolve(cacheInfo.repoLocalPath,
+				'examples',
+				template.replace(/next.js\/examples\/?/, '')
+			)
+		} else {
+			cacheInfo.repo = template
+			cacheInfo.repoLocalPath = path.resolve(path.join(cacheRoot, template))
+			cacheInfo.templatePath = cacheInfo.repoLocalPath
 		}
 
-		if (cacheInfo.templatesPath !== '') {
-			cacheInfo.templates = await readTemplateList(path.join(cacheInfo.cachePath, cacheInfo.templatesPath))
+		try {
+			cacheInfo.update = await cache.updatable(cacheInfo.repo, cacheRoot)
+
+			if (cacheInfo.force || cacheInfo.update) {
+				await cache.cache(cacheInfo.repo, cacheInfo.repoLocalPath)
+			}
+
+			if (u.isExamplesPath(template)) {
+				cacheInfo.templates = await readTemplateList(path.join(cacheInfo.repoLocalPath, 'examples'))
+			}
+		} catch (err) {
+			throw new Error(chalk`Preparing failed {green ${err.toString()} }`)
 		}
-	} catch (err) {
-		throw new Error(chalk`Preparing failed {green ${err.toString()} }`)
 	}
 
 	return cacheInfo

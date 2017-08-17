@@ -24,7 +24,8 @@
 		"prepublishOnly": "rm -rf ./dist && npm run build"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"template"
 	],
 	"keywords": [
 		"next",
