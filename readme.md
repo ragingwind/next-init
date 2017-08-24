@@ -6,13 +6,30 @@
 
 ## Install
 
-```
+```sh
 $ npm install -g next-init
 ```
 
-## Usage
+## Getting Started
 
+```sh
+# init with default tempalte
+$ next-init ./my-next-app
+
+# install dependencies
+$ cd ./my-next-app
+$ npm install
+
+# start next app in dev mode
+$ next-dev
+
+# start the next app in production
+$ next-build && next-start
 ```
+
+## More Usage
+
+```sh
 next-init --help
 ```
 
