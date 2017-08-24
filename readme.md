@@ -20,10 +20,10 @@ $ next-init ./my-next-app
 $ cd ./my-next-app
 $ npm install
 
-# start next app in dev mode
+# start next app in dev mode. equivalent to use `npm run dev`
 $ next-dev
 
-# start the next app in production
+# start the next app in production. equivalent to use `npm run build && npm start`
 $ next-build && next-start
 ```
 
