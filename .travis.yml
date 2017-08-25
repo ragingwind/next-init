@@ -2,6 +2,8 @@ language: node_js
 node_js:
   - '8'
   - '6'
+os: osx
+sudo: true
 install:
   - npm install
 script:
