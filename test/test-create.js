@@ -20,7 +20,7 @@ test(async t => {
 	}
 
 	const cacheInfo = {
-		templatePath: path.resolve('./template')
+		templatePath: path.resolve('./template/stable')
 	}
 
 	const opts = {

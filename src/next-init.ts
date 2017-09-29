@@ -23,6 +23,10 @@ Examples
   $ next-init
   $ next-init ./my-next-app
 
+  #default template with @beta
+  $ next-init @beta
+  $ next-init @beta ./my-next-app
+
   # community boilerplates
   $ next-init username/repo
   $ next-init username/repo ./my-next-app
@@ -55,7 +59,7 @@ async function main() {
 	}, {
 		title: 'Checking the template project',
 		task: async (ctx, task) => {
-			if (!u.isDefaultTempaltePath(ctx.args.template)) {
+			if (!u.isDefaults(ctx.args.template)) {
 				task.title = `Checking the updates of ${ctx.args.template.replace(/\/$/, '')}`
 			}
 
@@ -65,7 +69,7 @@ async function main() {
 				force: cli.force
 			})
 
-			if (!u.isDefaultTempaltePath(ctx.args.template)) {
+			if (!u.isDefaults(ctx.args.template)) {
 				task.title = `${ctx.cacheInfo.update ? 'Updates has been completed' : 'Latest updates'} for ${ctx.args.template.replace(/\/$/, '')}`
 			}
 		}
