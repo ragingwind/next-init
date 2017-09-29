@@ -79,8 +79,7 @@ async function main() {
 	const ctx = await tasks.run()
 	let answers
 
-	// ctx.args = {...ctx.args, ...envInfo}
-	// add empty line
+	// break a line
 	console.log('')
 
 	answers = await prompt({
