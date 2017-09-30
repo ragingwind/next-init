@@ -17,5 +17,6 @@ export default {
 	isBeta: (t: string) => /^@beta/.test(t),
 	whiteText: text => `\x1b[37m${text}\x1b[0m`,
 	greenText: text => `\x1b[32m${text}\x1b[0m`,
-	redText: text => `\x1b[31m${text}\x1b[0m`
+	redText: text => `\x1b[31m${text}\x1b[0m`,
+	isSamePath: t => path.relative(t, process.cwd()) === ''
 }

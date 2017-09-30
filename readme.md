@@ -40,6 +40,9 @@ next-init --help
 $ next-init
 $ next-init ./my-next-app
 
+# with interactive mode to update template values
+$ next-init -i
+
 # default template with @beta
 $ next-init @beta
 $ next-init @beta ./my-next-app

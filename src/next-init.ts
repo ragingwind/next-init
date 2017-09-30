@@ -36,10 +36,21 @@ Examples
   $ next-init next.js/examples/with-glamorous ./my-next-app
 
 Options
-	force    force update target template`
+	interactive    use interactive mode for params in template
+	force          force update target template`
 
 async function main() {
-	const cli = mri(process.argv.slice(2))
+	const cli = mri(process.argv.slice(2), {
+		alias: {
+			i: 'interactive',
+			f: 'force'
+		},
+		boolean: ['interactive', 'force'],
+		default: {
+			interactive: false,
+			force: false
+		}
+	})
 
 	if (cli.help) {
 		console.log(help)
@@ -73,7 +84,8 @@ async function main() {
 	const envInfo = await env()
 	const answers = await prompt({
 		args: {...args, ...envInfo},
-		templates: cacheInfo.templates
+		templates: cacheInfo.templates,
+		interactive: cli.interactive
 	})
 
 	if (answers.overwrite === false) {
