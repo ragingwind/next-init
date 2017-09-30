@@ -3,14 +3,13 @@
 import path = require('path')
 import mri = require('mri')
 import findCacheDir = require('find-cache-dir')
-import Listr = require('listr')
-import chalk = require('chalk')
 import figures = require('figures')
 import env from './env'
 import parseArgs from './parse-args'
 import prepare from './prepare'
 import prompt from './prompt'
 import create from './create'
+import status from './status'
 import u from './utils'
 
 const args = process.argv.slice(2);
@@ -37,7 +36,7 @@ Examples
   $ next-init next.js/examples/with-glamorous ./my-next-app
 
 Options
-  force    force update target template`
+	force    force update target template`
 
 async function main() {
 	const cli = mri(process.argv.slice(2))
@@ -53,38 +52,28 @@ async function main() {
 		cwd: __dirname
 	})
 
-	const tasks = new Listr([{
-		title: 'Preparing...',
-		task: async ctx => ctx.args = await parseArgs(cli._)
-	}, {
-		title: 'Checking the template project',
-		task: async (ctx, task) => {
-			if (!u.isDefaults(ctx.args.template)) {
-				task.title = `Checking the updates of ${ctx.args.template.replace(/\/$/, '')}`
-			}
+	const args = await parseArgs(cli._)
 
-			ctx.cacheInfo = await prepare({
-				template: ctx.args.template,
-				cacheRoot: cacheRoot,
-				force: cli.force
-			})
+	if (!u.isDefaults(args.template)) {
+		status.text(`Checking the updates of ${args.template.replace(/\/$/, '')}`)
+	}
 
-			if (!u.isDefaults(ctx.args.template)) {
-				task.title = `${ctx.cacheInfo.update ? 'Updates has been completed' : 'Latest updates'} for ${ctx.args.template.replace(/\/$/, '')}`
-			}
-		}
-	}])
+	const cacheInfo = await prepare({
+		template: args.template,
+		cacheRoot: cacheRoot,
+		force: cli.force
+	})
+
+	if (!u.isDefaults(args.template)) {
+		status.hide(`${cacheInfo.update ?
+			'Updates has been completed' :
+			'Latest updates'} for ${args.template.replace(/\/$/, '')}`)
+	}
 
 	const envInfo = await env()
-	const ctx = await tasks.run()
-	let answers
-
-	// break a line
-	console.log('')
-
-	answers = await prompt({
-		args: {...ctx.args, ...envInfo},
-		templates: ctx.cacheInfo.templates
+	const answers = await prompt({
+		args: {...args, ...envInfo},
+		templates: cacheInfo.templates
 	})
 
 	if (answers.overwrite === false) {
@@ -93,19 +82,16 @@ async function main() {
 
 	// update template path with answered tempate name in the cached list
 	if (answers.templateName) {
-		ctx.cacheInfo.templatePath = path.join(ctx.cacheInfo.templatePath, answers.templateName)
+		cacheInfo.templatePath = path.join(cacheInfo.templatePath, answers.templateName)
 	}
 
 	try {
-		// ctx.answers = answers
-		console.log(chalk`\n {green ${figures.tick} }Create a new Next.js app in {green ${ctx.args.target} }`)
-
 		await create({
-			args: {...ctx.args, ...envInfo, ...answers},
-			cacheInfo: ctx.cacheInfo
+			args: {...args, ...envInfo, ...answers},
+			cacheInfo: cacheInfo
 		})
 	} catch (err) {
-		console.error(chalk`\n {red ${figures.cross} }${err.stack}`)
+		console.error(`\n ${u.redText(err.stack)}`)
 		process.exit(-1)
 	}
 }

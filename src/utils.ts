@@ -14,5 +14,8 @@ export default {
 	isDefaultTempaltePath: (t: string) => /^next-init\/templates\/stable/.test(t),
 	isBetaTemplatePath: (t: string) => /^next-init\/templates\/beta/.test(t),
 	isDefaults: (t: string) => /^next-init\/templates\//.test(t),
-	isBeta: (t: string) => /^@beta/.test(t)
+	isBeta: (t: string) => /^@beta/.test(t),
+	whiteText: text => `\x1b[37m${text}\x1b[0m`,
+	greenText: text => `\x1b[32m${text}\x1b[0m`,
+	redText: text => `\x1b[31m${text}\x1b[0m`
 }
