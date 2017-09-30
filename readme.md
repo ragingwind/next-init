@@ -40,7 +40,11 @@ next-init --help
 $ next-init
 $ next-init ./my-next-app
 
-# community template, inspired from `vue init`
+# default template with @beta
+$ next-init @beta
+$ next-init @beta ./my-next-app
+
+# community template on github, inspired from `vue init`
 $ next-init username/username-next-app
 $ next-init username/someone-next-app ./my-next-app
 

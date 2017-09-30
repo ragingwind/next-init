@@ -22,11 +22,11 @@ Examples
   $ next-init
   $ next-init ./my-next-app
 
-  #default template with @beta
+  # default template with @beta
   $ next-init @beta
   $ next-init @beta ./my-next-app
 
-  # community boilerplates
+  # community boilerplates on github
   $ next-init username/repo
   $ next-init username/repo ./my-next-app
 
