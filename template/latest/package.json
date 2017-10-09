@@ -7,9 +7,9 @@
 		"email": "<%= user.email %>"
 	},
 	"dependencies": {
-		"next": "next@beta",
-		"react": "^16.0.0",
-		"react-dom": "^16.0.0"
+		"next": "next@latest",
+		"react": "react@latest",
+		"react-dom": "react@latest"
 	},
 	"scripts": {
 		"dev": "next",

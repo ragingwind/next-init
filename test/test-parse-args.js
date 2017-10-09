@@ -59,15 +59,15 @@ test(async t => {
 })
 
 test(async t => {
-	const args = await parseArgs(['@beta'])
+	const args = await parseArgs(['@latest'])
 
-	t.true(args.template === 'next-init/templates/beta')
+	t.true(args.template === 'next-init/templates/latest')
 	t.true(args.target === path.resolve('./'))
 })
 
 test(async t => {
-	const args = await parseArgs(['@beta', './my-next-app'])
+	const args = await parseArgs(['@latest', './my-next-app'])
 
-	t.true(args.template === 'next-init/templates/beta')
+	t.true(args.template === 'next-init/templates/latest')
 	t.true(args.target === path.resolve('./my-next-app'))
 })

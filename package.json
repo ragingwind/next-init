@@ -35,6 +35,7 @@
 	],
 	"dependencies": {
 		"cache-github-repo": "^0.3.0",
+		"cross-spawn": "^5.1.0",
 		"execa": "^0.7.0",
 		"figures": "^2.0.0",
 		"find-cache-dir": "^1.0.0",

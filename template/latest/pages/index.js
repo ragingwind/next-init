@@ -9,7 +9,7 @@ export default () => (
 		<img width='112' src='https://cloud.githubusercontent.com/assets/13041/19686250/971bf7f8-9ac0-11e6-975c-188defd82df1.png' alt='next.js' />
 
 		<h2><%= projectName %></h2>
-		<h3><%= description %> with @beta</h3>
+		<h3><%= description %> with @latest</h3>
 
 
 		<style jsx global>{`

@@ -10,6 +10,7 @@ import prepare from './prepare'
 import prompt from './prompt'
 import create from './create'
 import status from './status'
+import install from './install'
 import u from './utils'
 
 const args = process.argv.slice(2);
@@ -22,9 +23,9 @@ Examples
   $ next-init
   $ next-init ./my-next-app
 
-  # default template with @beta
-  $ next-init @beta
-  $ next-init @beta ./my-next-app
+  # default template with @latest
+  $ next-init @latest
+  $ next-init @latest ./my-next-app
 
   # community boilerplates on github
   $ next-init username/repo
@@ -63,47 +64,51 @@ async function main() {
 		cwd: __dirname
 	})
 
-	const args = await parseArgs(cli._)
-
-	if (!u.isDefaults(args.template)) {
-		status.text(`Checking the updates of ${args.template.replace(/\/$/, '')}`)
-	}
-
-	const cacheInfo = await prepare({
-		template: args.template,
-		cacheRoot: cacheRoot,
-		force: cli.force
-	})
-
-	if (!u.isDefaults(args.template)) {
-		status.hide(`${cacheInfo.update ?
-			'Updates has been completed' :
-			'Latest updates'} for ${args.template.replace(/\/$/, '')}`)
-	}
-
-	const envInfo = await env()
-	const answers = await prompt({
-		args: {...args, ...envInfo},
-		templates: cacheInfo.templates,
-		interactive: cli.interactive
-	})
-
-	if (answers.overwrite === false) {
-		return
-	}
-
-	// update template path with answered tempate name in the cached list
-	if (answers.templateName) {
-		cacheInfo.templatePath = path.join(cacheInfo.templatePath, answers.templateName)
-	}
-
 	try {
+		const args = await parseArgs(cli._)
+
+		if (!u.isDefaults(args.template)) {
+			status.text(`Checking the updates of ${args.template.replace(/\/$/, '')}`)
+		}
+
+		const cacheInfo = await prepare({
+			template: args.template,
+			cacheRoot: cacheRoot,
+			force: cli.force
+		})
+
+		if (!u.isDefaults(args.template)) {
+			status.hide(`${cacheInfo.update ?
+				'Updates has been completed' :
+				'Latest updates'} for ${args.template.replace(/\/$/, '')}`)
+		}
+
+		const envInfo = await env()
+		const answers = await prompt({
+			args: {...args, ...envInfo},
+			templates: cacheInfo.templates,
+			interactive: cli.interactive
+		})
+
+		if (answers.overwrite === false) {
+			return
+		}
+
+		// update template path with answered tempate name in the cached list
+		if (answers.templateName) {
+			cacheInfo.templatePath = path.join(cacheInfo.templatePath, answers.templateName)
+		}
+
 		await create({
 			args: {...args, ...envInfo, ...answers},
 			cacheInfo: cacheInfo
 		})
+
+		if (u.isLatestTemplatePath(args.template)) {
+			await install(args)
+		}
 	} catch (err) {
-		console.error(`\n ${u.redText(err.stack)}`)
+		console.error(`\n ${u.redText(err.toString())}`)
 		process.exit(-1)
 	}
 }
