@@ -11,16 +11,16 @@ test.before(async t => {
 	await fs.ensureDir(path.resolve(cacheRoot))
 })
 
-test('next-init', async t => {
+test('stable', async t => {
 	let cacheInfo
 
 	cacheInfo = await prepare({
-		template: 'next-init/templates/default',
+		template: 'next-init/templates/stable',
 		cacheRoot,
 		force: true
 	})
 
-	t.true(cacheInfo.templatePath === path.resolve('./template'))
+	t.true(cacheInfo.templatePath === path.resolve('./template/stable'))
 
 	try {
 		await prepare({

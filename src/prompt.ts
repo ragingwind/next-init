@@ -9,12 +9,13 @@ interface PropmptProps {
 
 export default function ({
 	args,
-	templates
+	templates,
+	interactive
 }) {
 	const projectName = path.basename(args.target)
 	let prompts = []
 
-	if (!u.isExamplesPath(args.template)) {
+	if (!u.isExamplesPath(args.template) && interactive) {
 		prompts = [{
 			name: 'projectName',
 			message: 'Project name?',
@@ -30,11 +31,12 @@ export default function ({
 		}]
 	}
 
-	if (fs.pathExistsSync(args.target)) {
+	if ((u.isSamePath(args.target) && fs.readdirSync(args.target).length > 0) ||
+		(!u.isSamePath(args.target) && fs.pathExistsSync(args.target))) {
 		prompts.push({
 			type: 'confirm',
 			name: 'overwrite',
-			message: 'Target path is exist already, overwrite?',
+			message: 'Target is exist already, overwrite?',
 			default: true
 		})
 	}

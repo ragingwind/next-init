@@ -40,7 +40,14 @@ next-init --help
 $ next-init
 $ next-init ./my-next-app
 
-# community template, inspired from `vue init`
+# with interactive mode to update template values
+$ next-init -i
+
+# default template with @latest
+$ next-init @latest
+$ next-init @latest ./my-next-app
+
+# community template on github, inspired from `vue init`
 $ next-init username/username-next-app
 $ next-init username/someone-next-app ./my-next-app
 

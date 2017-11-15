@@ -5,14 +5,14 @@ import * as path from 'path'
 test(async t => {
 	const args = await parseArgs([])
 
-	t.true(args.template === 'next-init/templates/default')
+	t.true(args.template === 'next-init/templates/stable')
 	t.true(args.target === path.resolve('./'))
 })
 
 test(async t => {
 	const args = await parseArgs(['./my-next-app'])
 
-	t.true(args.template === 'next-init/templates/default')
+	t.true(args.template === 'next-init/templates/stable')
 	t.true(args.target === path.resolve('./my-next-app'))
 })
 
@@ -55,5 +55,19 @@ test(async t => {
 	const args = await parseArgs(['next.js/examples', './my-next-app'])
 
 	t.true(args.template === 'next.js/examples')
+	t.true(args.target === path.resolve('./my-next-app'))
+})
+
+test(async t => {
+	const args = await parseArgs(['@latest'])
+
+	t.true(args.template === 'next-init/templates/latest')
+	t.true(args.target === path.resolve('./'))
+})
+
+test(async t => {
+	const args = await parseArgs(['@latest', './my-next-app'])
+
+	t.true(args.template === 'next-init/templates/latest')
 	t.true(args.target === path.resolve('./my-next-app'))
 })

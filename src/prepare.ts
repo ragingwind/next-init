@@ -32,8 +32,12 @@ export default async function ({
 	}
 
 	if (u.isDefaultTempaltePath(template)) {
-		cacheInfo.repo = `next-init/templates`
-		cacheInfo.templatePath = path.resolve(__dirname, '../template')
+		cacheInfo.repo = `next-init/templates/stable`
+		cacheInfo.templatePath = path.resolve(__dirname, '../template/stable')
+	}
+	else if (u.isLatestTemplatePath(template)) {
+		cacheInfo.repo = `next-init/templates/latest`
+		cacheInfo.templatePath = path.resolve(__dirname, '../template/latest')
 	} else {
 		if (u.isExamplesPath(template)) {
 			cacheInfo.repo = `zeit/next.js`

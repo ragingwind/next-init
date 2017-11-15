@@ -11,5 +11,12 @@ export default {
 	isPathString: (t: string) => t.indexOf('/') > 0,
 	trimSlash: (t: string) => t.replace(/^\//, '').replace(/$\//, ''),
 	isExamplesPath: (t: string) => /^next.js\/examples/.test(t),
-	isDefaultTempaltePath: (t: string) => /^next-init\/templates\//.test(t)
+	isDefaultTempaltePath: (t: string) => /^next-init\/templates\/stable/.test(t),
+	isLatestTemplatePath: (t: string) => /^next-init\/templates\/latest/.test(t),
+	isDefaults: (t: string) => /^next-init\/templates\//.test(t),
+	isLatest: (t: string) => /^@latest/.test(t),
+	whiteText: text => `\x1b[37m${text}\x1b[0m`,
+	greenText: text => `\x1b[32m${text}\x1b[0m`,
+	redText: text => `\x1b[31m${text}\x1b[0m`,
+	isSamePath: t => path.relative(t, process.cwd()) === ''
 }
