@@ -27,6 +27,10 @@ Examples
   $ next-init @latest
   $ next-init @latest ./my-next-app
 
+  # default template with @canary
+  $ next-init @canary
+  $ next-init @canary ./my-next-app
+
   # community boilerplates on github
   $ next-init username/repo
   $ next-init username/repo ./my-next-app
@@ -104,9 +108,7 @@ async function main() {
 			cacheInfo: cacheInfo
 		})
 
-		if (u.isLatestTemplatePath(args.template)) {
-			await install(args)
-		}
+		await install(args)
 	} catch (err) {
 		console.error(`\n ${u.redText(err.toString())}`)
 		process.exit(-1)

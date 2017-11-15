@@ -5,9 +5,9 @@ export default async function (args) {
 		const child = spawn('npm', [
 			'install',
 			'--save',
-			'next@latest',
-			'react@latest',
-			'react-dom@latest'
+			`next${args.nextVersion}`,
+			'react',
+			'react-dom'
 		], {
 			stdio: 'inherit',
 			cwd: args.target

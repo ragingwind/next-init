@@ -2,7 +2,7 @@ import path = require('path')
 import fs = require('fs-extra')
 import execa = require('execa')
 import pFilter = require('p-filter')
-import chalk = require('chalk')
+import chalk from 'chalk'
 import CacheGithubRepo from 'cache-github-repo'
 import u from './utils'
 
@@ -32,12 +32,8 @@ export default async function ({
 	}
 
 	if (u.isDefaultTempaltePath(template)) {
-		cacheInfo.repo = `next-init/templates/stable`
-		cacheInfo.templatePath = path.resolve(__dirname, '../template/stable')
-	}
-	else if (u.isLatestTemplatePath(template)) {
-		cacheInfo.repo = `next-init/templates/latest`
-		cacheInfo.templatePath = path.resolve(__dirname, '../template/latest')
+		cacheInfo.repo = `next-init/templates/default`
+		cacheInfo.templatePath = path.resolve(__dirname, '../template/default')
 	} else {
 		if (u.isExamplesPath(template)) {
 			cacheInfo.repo = `zeit/next.js`

@@ -2,7 +2,7 @@ import path = require('path')
 import child = require('child_process')
 import fs = require('fs-extra')
 import readPkg = require('read-pkg')
-import chalk = require('chalk')
+import chalk from 'chalk'
 import figures = require('figures')
 
 const nextBin = './node_modules/.bin/next'

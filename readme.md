@@ -43,9 +43,13 @@ $ next-init ./my-next-app
 # with interactive mode to update template values
 $ next-init -i
 
-# default template with @latest
+# default template with @latest stable version
 $ next-init @latest
 $ next-init @latest ./my-next-app
+
+# default template with @canary version
+$ next-init @canary
+$ next-init @canary ./my-next-app
 
 # community template on github, inspired from `vue init`
 $ next-init username/username-next-app

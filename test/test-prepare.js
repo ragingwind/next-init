@@ -15,12 +15,12 @@ test('stable', async t => {
 	let cacheInfo
 
 	cacheInfo = await prepare({
-		template: 'next-init/templates/stable',
+		template: 'next-init/templates/default',
 		cacheRoot,
 		force: true
 	})
 
-	t.true(cacheInfo.templatePath === path.resolve('./template/stable'))
+	t.true(cacheInfo.templatePath === path.resolve('./template/default'))
 
 	try {
 		await prepare({

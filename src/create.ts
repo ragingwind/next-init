@@ -10,7 +10,7 @@ function copy({
 	args,
 	target,
 	templatePath
-}) {
+}) {	
 	if (!args || Object.keys(args).length === 0) {
 		throw new TypeError('Templating requires default arguments')
 	}

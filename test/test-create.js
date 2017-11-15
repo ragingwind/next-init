@@ -20,12 +20,12 @@ test(async t => {
 	}
 
 	const cacheInfo = {
-		templatePath: path.resolve('./template/stable')
+		templatePath: path.resolve('./template/default')
 	}
 
 	const opts = {
 		args: Object.assign(args, await env()),
-		cacheInfo
+		cacheInfo: cacheInfo
 	}
 
 	const output = path.resolve(args.target)
