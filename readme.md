@@ -1,6 +1,4 @@
-![](https://avatars2.githubusercontent.com/u/30463846?v=4&u=b080ecd2d7d1226eb6e982cf1de875d4765e275d&s=200)
-
-# next-init
+<img width="200" src="https://user-images.githubusercontent.com/124117/32878591-e6995fa2-caa6-11e7-9f4b-ab7d1ac0b465.png">
 
 > CLI for Next.js apps scaffolding from whatever
 
