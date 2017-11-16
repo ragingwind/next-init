@@ -76,4 +76,4 @@ next-build
 
 ## License
 
-MIT © [next-init](https://github.com/next-init)
+MIT © [Jimmy Moon](https://github.com/ragingwind)
